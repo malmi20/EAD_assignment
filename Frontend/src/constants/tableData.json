@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "routeId": "132",
+    "busNo": "BS-10552",
+    "driverId": "DR-1001",
+    "dateTime": "2023-01-01 10:00:00",
+    "from": "Colombo",
+    "fromId": 1,
+    "to": "Ragama",
+    "toId": 3
+  },
+  {
+    "id": 2,
+    "routeId": "136",
+    "busNo": "BS-10025",
+    "driverId": "DR-1002",
+    "dateTime": "2023-02-01 10:00:00",
+    "from": "Colombo",
+    "fromId": 1,
+    "to": "Negombo",
+    "toId": 2
+  },
+  {
+    "id": 3,
+    "routeId": "144",
+    "busNo": "HS-10067",
+    "driverId": "DR-1003",
+    "dateTime": "2023-03-01 10:00:00",
+    "from": "Negombo",
+    "fromId": 2,
+    "to": "Colombo",
+    "toId": 1
+  },
+  {
+    "id": 4,
+    "routeId": "132",
+    "busNo": "BY-14525",
+    "driverId": "DR-1004",
+    "dateTime": "2023-04-01 10:00:00",
+    "from": "Ragama",
+    "fromId": 4,
+    "to": "Colombo",
+    "toId": 1
+  }
+]

@@ -98,8 +98,7 @@ const VendorManagement = ({ isAdmin }) => {
   return (
     <Container>
       <h1 className="my-4 text-center">Vendor Management</h1>
-      
-      {isAdmin && (
+    
         <Row className="mb-5">
           <Col md={6}>
             <Form>
@@ -127,7 +126,7 @@ const VendorManagement = ({ isAdmin }) => {
             </Form>
           </Col>
         </Row>
-      )}
+    
 
       {/* Vendor List */}
       <Row>

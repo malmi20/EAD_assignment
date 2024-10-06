@@ -3,10 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { NavDropdown } from "react-bootstrap";
 import { AppContext } from "../../context/AuthContext";
-import logo from "../../assets/bus-logo.svg"
+import logo from "../../assets/logo.png"
 
 const Navbar = ({ hamActive, setHamActive }) => {
   const { handleSignOut, isAuthenticated,user } = useContext(AppContext);
+  const isAdmin = user?.role === "Admin";
+  const vendor =  user?.role === "Vendor";
 
   const location = useLocation();
   const { pathname } = location;
@@ -27,22 +29,32 @@ const Navbar = ({ hamActive, setHamActive }) => {
         <span className={styles.hamburgerLines}></span>
       </button>
       <Link to={"/"} className={`${styles.navLeft}`}>
-        <img src={logo} alt="logo" width={300} height={300} className={styles.brand} />
+        <img src={logo} alt="logo" width={300} height={150} className={styles.brand} />
       </Link>
       <div className={`${styles.navRight} center`}>
         <div className="d-flex align-items-center">
           {isAuthenticated && (
           <div className={styles.navLinksWrapper}>
-            <div className={styles.navLinksWrapper} hidden={user?.isBusOwner}>
-              <Link to={"/routeManager"} className={`${styles.nav} center ${pathname === '/routeManager' && 'active'}`}>
-                Route Manager
+            <div className={styles.navLinksWrapper}>
+              <Link to={"/OrderManagement"} className={`${styles.nav} center ${pathname === '/OrderManagement' && 'active'}`}>
+                Order Management
               </Link>
             </div>
-            <div className={styles.navLinksWrapper} hidden={!user?.isBusOwner}>
-              <Link to={"/buslist"} className={`${styles.nav} center ${pathname === '/buslist' && 'active'}`}>
-                Bus List Manager
+            {(vendor || isAdmin) && <div className={styles.navLinksWrapper}>
+              <Link to={"/productManager"} className={`${styles.nav} center ${pathname === '/productManager' && 'active'}`}>
+                Product Management
               </Link>
-            </div>
+            </div>}
+            {(vendor || isAdmin) && <div className={styles.navLinksWrapper}>
+              <Link to={"/VendorManagement"} className={`${styles.nav} center ${pathname === '/VendorManagement' && 'active'}`}>
+                Vendor Management
+              </Link>
+            </div>}
+            {isAdmin && <div className={styles.navLinksWrapper}>
+              <Link to={"/InventoryManagement"} className={`${styles.nav} center ${pathname === '/InventoryManagement' && 'active'}`}>
+                Inventory Management
+              </Link>
+            </div>}
             <div className={styles.verticalLine} />
           </div>
         )}

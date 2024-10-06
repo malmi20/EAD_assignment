@@ -114,6 +114,8 @@ function ProductManager() {
   const saveProduct = async (payload) => {
     // Mock API call
     console.log("Saving product:", payload);
+    setProductData(prev => ([...prev,{...payload}]));
+    setTableData(prev => ([...prev,{...payload}]));
     return {
       data: { message: 'Product saved successfully' },
     };
@@ -127,8 +129,8 @@ function ProductManager() {
     };
   };
 
-  const onSearchHandler = (e) => {
-    const query = e.target.value.toLowerCase();
+  const onSearchHandler = (e =null) => {
+    const query = e?.target?.value?.toLowerCase();
     setTableData(
       query
         ? productData.filter(

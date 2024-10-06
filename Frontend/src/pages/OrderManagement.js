@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Form, Button, Table, Modal } from "react-bootstrap";
+import { AppContext } from "../context/AuthContext";
 
 function OrderManagement() {
   const initialOrder = {
@@ -18,6 +19,10 @@ function OrderManagement() {
   const [showModal, setShowModal] = useState(false);
   const [orderToCancel, setOrderToCancel] = useState(null);
   const [cancelNote, setCancelNote] = useState("");
+
+  const { user } = useContext(AppContext);
+  const isCSR= user?.role === "CSR";
+  const isAdmin = user?.role === "Admin";
 
   // Handle form submission for creating or updating an order
   const handleSubmit = (e) => {
@@ -199,14 +204,14 @@ function OrderManagement() {
                 >
                   Dispatch
                 </Button>
-                <Button
+                {(isCSR || isAdmin) && <Button
                   variant="danger"
                   size="sm"
                   onClick={() => confirmCancelOrder(order)}
                   disabled={order.status === "Dispatched" || order.status === "Delivered"}
                 >
                   Cancel
-                </Button>
+                </Button>}
                 <Button
                   variant="success"
                   size="sm"

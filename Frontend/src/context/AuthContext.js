@@ -53,8 +53,8 @@ const AuthContextProvider = ({ children }) => {
     (authData) => {
       const { token,...userData } = authData;
       localStorage.setItem("token", JSON.stringify({ token }));
-      localStorage.setItem("userData", JSON.stringify(userData));
-      setUser(userData);
+      localStorage.setItem("userData", JSON.stringify({...userData,role:"Admin"}));
+      setUser({...userData,role:"Admin"});
       setIsAuthenticated(true);
       navigate("/");
     },

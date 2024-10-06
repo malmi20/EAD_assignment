@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="orange_mid">#e36222</color>
+    <color name="bg_slate">#f2f0f0</color>
+    <color name="bg_slate_dark">#515251</color>
+</resources>
+
+<!--old-->
+<!--<color name="orange_mid">#bd6c44</color>-->
+
+<!--new-->
+<!--<color name="orange_mid">#e36222</color>-->

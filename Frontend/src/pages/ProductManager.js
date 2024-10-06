@@ -98,7 +98,7 @@ function ProductManager() {
       resetForm();
       setValues(initialData);
       setCurrentState(defaultState);
-      fetchProductData(); // Refresh product list
+     // fetchProductData(); 
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {

@@ -5,8 +5,12 @@ import Form from 'react-bootstrap/Form';
 import { BsSearch } from 'react-icons/bs';
 import Table from "../components/custom/CustomTable";
 import CustomModal from "../components/custom/CustomModal";
+import SampleImg from '../assets/upload-img.png'
 
 function ProductManager() {
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const expenseData={img:""}
   const initialData = {
     id: "",
     name: "",
@@ -98,7 +102,7 @@ function ProductManager() {
       resetForm();
       setValues(initialData);
       setCurrentState(defaultState);
-      fetchProductData(); // Refresh product list
+      // fetchProductData(); // Refresh product list
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
@@ -151,7 +155,7 @@ function ProductManager() {
   const onDeleteHandler = async () => {
     try {
       await deleteProduct(selectedItem.id);
-      fetchProductData();
+      // fetchProductData();
       setSelectedItem(null);
       setShow(false);
     } catch (error) {
@@ -231,7 +235,7 @@ function ProductManager() {
       ),
     },
   ];
-
+  
   return (
     <Row className="px-5 pt-4">
       <Card body className="shadow p-3 mb-3 bg-white rounded">
@@ -342,6 +346,37 @@ function ProductManager() {
                   />
                 </Form.Group>
               </Col>
+            </Row>
+            <Row className='mt-3'>
+              <Form.Label>Upload The Product Image</Form.Label>
+              <br/><br/>
+              <div className="img-wrapper">
+                  <label htmlFor="img-upload" className="img-upload-label">
+                      <img 
+                          src={expenseData.img != '' && file === null ? expenseData.img : file === null ? SampleImg : imagePreview} 
+                          id="expense-updateable-img"
+                      />
+                      <input 
+                          id="img-upload" 
+                          className="img-upload" 
+                          name="img-upload" 
+                          type="file" 
+                          accept="image/png, image/jpg, image/gif, image/jpeg"
+                          onChange={(e) => {
+                              const img = e.target.files[0];
+                              if (img) {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                      setImagePreview(reader.result);
+                                  };
+                                  reader.readAsDataURL(img);
+                              }
+                              setFile(img);
+                          }}
+                          required
+                      />
+                  </label>
+              </div>
             </Row>
             <Row className="mt-2">
               <Col className="d-flex justify-content-start">

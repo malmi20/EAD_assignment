@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// Assuming userId is available globally or passed as a prop.
+const userId = 'currentCustomerId';
+
 const vendorsData = [
-  { id: 'V001', name: 'Vendor A', ranking: 4.5, comments: [] },
+  { id: 'V001', name: 'Vendor A', ranking: 4.5, comments: [{ comment: 'Good service', ranking: 5, userId: 'currentCustomerId' }] },
   { id: 'V002', name: 'Vendor B', ranking: 3.8, comments: [] }
 ];
 
@@ -12,6 +15,8 @@ const VendorManagement = ({ isAdmin }) => {
   const [newVendorId, setNewVendorId] = useState('');
   const [newVendorName, setNewVendorName] = useState('');
   const [vendorInputs, setVendorInputs] = useState({}); // State to manage individual vendor inputs
+
+  const [editingComment, setEditingComment] = useState(null); // Track the comment being edited
 
   // Function to add a new vendor (Admin only)
   const addVendor = () => {
@@ -31,7 +36,7 @@ const VendorManagement = ({ isAdmin }) => {
     if (comment && ranking) {
       const updatedVendors = vendors.map((vendor) => {
         if (vendor.id === vendorId) {
-          const newComments = [...vendor.comments, { comment, ranking: parseInt(ranking) }];
+          const newComments = [...vendor.comments, { comment, ranking: parseInt(ranking), userId }];
           const newAvgRanking = calculateAverageRanking(newComments);
           return { ...vendor, comments: newComments, ranking: newAvgRanking };
         }
@@ -59,6 +64,35 @@ const VendorManagement = ({ isAdmin }) => {
         [field]: value
       }
     });
+  };
+
+  // Function to initiate editing of a comment
+  const startEditComment = (vendorId, commentIndex) => {
+    setEditingComment({ vendorId, commentIndex });
+    const commentToEdit = vendors.find(v => v.id === vendorId).comments[commentIndex];
+    setVendorInputs({ ...vendorInputs, [vendorId]: { comment: commentToEdit.comment } });
+  };
+
+  // Function to save the edited comment
+  const saveEditedComment = (vendorId, commentIndex) => {
+    const { comment } = vendorInputs[vendorId] || {};
+    if (comment) {
+      const updatedVendors = vendors.map((vendor) => {
+        if (vendor.id === vendorId) {
+          const updatedComments = vendor.comments.map((c, index) => {
+            if (index === commentIndex) {
+              return { ...c, comment };
+            }
+            return c;
+          });
+          return { ...vendor, comments: updatedComments };
+        }
+        return vendor;
+      });
+      setVendors(updatedVendors);
+      setEditingComment(null); // Stop editing mode
+      setVendorInputs({ ...vendorInputs, [vendorId]: { comment: '' } }); // Clear the input for the vendor
+    }
   };
 
   return (
@@ -120,7 +154,27 @@ const VendorManagement = ({ isAdmin }) => {
                     <ul>
                       {vendor.comments.map((comment, idx) => (
                         <li key={idx}>
-                          {comment.comment} - <strong>Rating:</strong> {comment.ranking}
+                          {editingComment && editingComment.vendorId === vendor.id && editingComment.commentIndex === idx ? (
+                            <>
+                              <Form.Control
+                                type="text"
+                                value={vendorInputs[vendor.id]?.comment || ''}
+                                onChange={(e) => handleInputChange(vendor.id, 'comment', e.target.value)}
+                              />
+                              <Button variant="success" onClick={() => saveEditedComment(vendor.id, idx)}>
+                                Save
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              {comment.comment} - <strong>Rating:</strong> {comment.ranking}
+                              {comment.userId === userId && (
+                                <Button variant="link" onClick={() => startEditComment(vendor.id, idx)}>
+                                  Edit
+                                </Button>
+                              )}
+                            </>
+                          )}
                         </li>
                       ))}
                     </ul>

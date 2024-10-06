@@ -11,6 +11,7 @@ import UpdateBus from "./pages/UpdateBus";
 import ProductManager from "./pages/ProductManager"
 import OrderManagement from "./pages/OrderManagement.js"
 import InventoryManagement from "./pages/InventoryManagement"
+import VendorManagement from "./pages/VendorManagement.js"
 
 const AppRoutes = () => {
   const { user } = useContext(AppContext);
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path={"/productManager"} element={<ProductManager />} />
         <Route path={"/OrderManagement"} element={<OrderManagement />} />
         <Route path={"/InventoryManagement"} element={<InventoryManagement />} />
+        <Route path={"/VendorManagement"} element={<VendorManagement />} />
         <Route path="/buslist" element={<BusList/>}/>
         <Route path="/addbus" element={<AddBus/>}/>
         <Route path="/updateBus/:id" element={<UpdateBus/>}/>

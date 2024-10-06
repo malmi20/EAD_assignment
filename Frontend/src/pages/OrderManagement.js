@@ -8,6 +8,8 @@ function OrderManagement() {
     product: "",
     quantity: 1,
     status: "Processing", // default status
+    vendors: [], // List of vendors involved in the order
+    partiallyDelivered: false, // Track if partially delivered
   };
 
   const [orders, setOrders] = useState([]);
@@ -15,6 +17,7 @@ function OrderManagement() {
   const [editMode, setEditMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [orderToCancel, setOrderToCancel] = useState(null);
+  const [cancelNote, setCancelNote] = useState("");
 
   // Handle form submission for creating or updating an order
   const handleSubmit = (e) => {
@@ -46,11 +49,11 @@ function OrderManagement() {
 
   // Edit an order
   const handleEdit = (order) => {
-    if (order.status !== "Dispatched") {
+    if (order.status !== "Dispatched" && order.status !== "Delivered") {
       setCurrentOrder(order);
       setEditMode(true);
     } else {
-      alert("Cannot edit the order after it is dispatched.");
+      alert("Cannot edit the order after it is dispatched or delivered.");
     }
   };
 
@@ -61,22 +64,42 @@ function OrderManagement() {
         order.id === orderId ? { ...order, status: status } : order
       )
     );
+    notifyCustomer(orderId, status);
   };
 
-  // Cancel an order (before it's dispatched)
+  // Cancel an order (before it's dispatched or delivered)
   const cancelOrder = (order) => {
-    if (order.status !== "Dispatched") {
+    if (order.status !== "Dispatched" && order.status !== "Delivered") {
       setOrders(orders.filter((o) => o.id !== order.id));
       setShowModal(false);
+      notifyCustomer(order.id, "Cancelled");
     } else {
-      alert("Cannot cancel the order after it is dispatched.");
+      alert("Cannot cancel the order after it is dispatched or delivered.");
     }
   };
 
-  // Handle modal confirmation for canceling an order
+  // Notify customer about order status
+  const notifyCustomer = (orderId, status) => {
+    const order = orders.find((o) => o.id === orderId);
+    if (order) {
+      alert(`Notification sent to customer: Order ${orderId} is now ${status}`);
+    }
+  };
+
+  // Handle modal confirmation for canceling an order with a note
   const confirmCancelOrder = (order) => {
     setOrderToCancel(order);
     setShowModal(true);
+  };
+
+  // Mark order as partially delivered
+  const markAsPartiallyDelivered = (order) => {
+    setOrders(
+      orders.map((o) =>
+        o.id === order.id ? { ...o, partiallyDelivered: true, status: "Partially Delivered" } : o
+      )
+    );
+    notifyCustomer(order.id, "Partially Delivered");
   };
 
   return (
@@ -160,7 +183,7 @@ function OrderManagement() {
                   variant="info"
                   size="sm"
                   onClick={() => handleEdit(order)}
-                  disabled={order.status === "Dispatched"}
+                  disabled={order.status === "Dispatched" || order.status === "Delivered"}
                   className="me-2"
                 >
                   Edit
@@ -172,7 +195,7 @@ function OrderManagement() {
                     updateOrderStatus(order.id, "Dispatched")
                   }
                   className="me-2"
-                  disabled={order.status === "Dispatched"}
+                  disabled={order.status === "Dispatched" || order.status === "Delivered"}
                 >
                   Dispatch
                 </Button>
@@ -180,9 +203,17 @@ function OrderManagement() {
                   variant="danger"
                   size="sm"
                   onClick={() => confirmCancelOrder(order)}
-                  disabled={order.status === "Dispatched"}
+                  disabled={order.status === "Dispatched" || order.status === "Delivered"}
                 >
                   Cancel
+                </Button>
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => markAsPartiallyDelivered(order)}
+                  disabled={order.partiallyDelivered || order.status === "Delivered"}
+                >
+                  Mark as Partially Delivered
                 </Button>
               </td>
             </tr>
@@ -196,8 +227,16 @@ function OrderManagement() {
           <Modal.Title>Cancel Order</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to cancel the order for{" "}
-          {orderToCancel?.customerName}?
+          <p>Are you sure you want to cancel the order for {orderToCancel?.customerName}?</p>
+          <Form.Group controlId="cancelNote" className="mb-3">
+            <Form.Label>Cancel Note</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter reason for cancellation"
+              value={cancelNote}
+              onChange={(e) => setCancelNote(e.target.value)}
+            />
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>

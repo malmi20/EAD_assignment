@@ -1,130 +1,167 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
+import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Mock Data (for vendors and customers)
-const initialVendors = [
-  { id: 1, name: "Vendor A", rankings: [], comments: [] },
-  { id: 2, name: "Vendor B", rankings: [], comments: [] }
+const vendorsData = [
+  { id: 'V001', name: 'Vendor A', ranking: 4.5, comments: [] },
+  { id: 'V002', name: 'Vendor B', ranking: 3.8, comments: [] }
 ];
 
-const VendorManagement = () => {
-  const [vendors, setVendors] = useState(initialVendors);
-  const [newVendorName, setNewVendorName] = useState("");
-  const [isAdmin, setIsAdmin] = useState(true); // Change to 'false' if not admin
+const VendorManagement = ({ isAdmin }) => {
+  const [vendors, setVendors] = useState(vendorsData);
+  const [newVendorId, setNewVendorId] = useState('');
+  const [newVendorName, setNewVendorName] = useState('');
+  const [vendorInputs, setVendorInputs] = useState({}); // State to manage individual vendor inputs
 
-  // Customer state for adding rankings/comments
-  const [currentVendor, setCurrentVendor] = useState(null);
-  const [comment, setComment] = useState("");
-  const [rank, setRank] = useState(0);
-  const [isCommentEditable, setIsCommentEditable] = useState(false);
-
-  // Add new vendor (Admin only)
+  // Function to add a new vendor (Admin only)
   const addVendor = () => {
-    if (newVendorName) {
-      setVendors([...vendors, { id: vendors.length + 1, name: newVendorName, rankings: [], comments: [] }]);
-      setNewVendorName("");
+    if (newVendorId && newVendorName) {
+      const newVendor = { id: newVendorId, name: newVendorName, ranking: 0, comments: [] };
+      setVendors([...vendors, newVendor]);
+      setNewVendorId(''); // Reset input field
+      setNewVendorName(''); // Reset input field
+    } else {
+      alert('Vendor ID and Vendor Name cannot be empty.');
     }
   };
 
-  // Handle ranking submission for a customer
-  const submitRanking = (vendorId) => {
-    const updatedVendors = vendors.map((vendor) => {
-      if (vendor.id === vendorId) {
-        // Prevent customer from changing their ranking after submission
-        if (!vendor.rankings.some((r) => r.userId === 1)) {
-          vendor.rankings.push({ userId: 1, rank: parseInt(rank) });
+  // Function to add a comment and ranking for a specific vendor
+  const addCommentAndRanking = (vendorId) => {
+    const { comment, ranking } = vendorInputs[vendorId] || {};
+    if (comment && ranking) {
+      const updatedVendors = vendors.map((vendor) => {
+        if (vendor.id === vendorId) {
+          const newComments = [...vendor.comments, { comment, ranking: parseInt(ranking) }];
+          const newAvgRanking = calculateAverageRanking(newComments);
+          return { ...vendor, comments: newComments, ranking: newAvgRanking };
         }
-        vendor.comments.push({ userId: 1, comment });
-      }
-      return vendor;
-    });
-    setVendors(updatedVendors);
-    setCurrentVendor(null);
+        return vendor;
+      });
+      setVendors(updatedVendors);
+      setVendorInputs({ ...vendorInputs, [vendorId]: { comment: '', ranking: 0 } }); // Clear the input for the vendor
+    } else {
+      alert('Please enter a comment and a ranking.');
+    }
   };
 
-  // Calculate average ranking
-  const getAverageRanking = (vendor) => {
-    const total = vendor.rankings.reduce((sum, r) => sum + r.rank, 0);
-    return vendor.rankings.length ? (total / vendor.rankings.length).toFixed(1) : "No rankings yet";
+  // Calculate average ranking based on the comments
+  const calculateAverageRanking = (comments) => {
+    const totalRanking = comments.reduce((total, { ranking }) => total + ranking, 0);
+    return (totalRanking / comments.length).toFixed(2);
   };
 
-  // Handle comment editing for customer
-  const editComment = (vendorId) => {
-    const updatedVendors = vendors.map((vendor) => {
-      if (vendor.id === vendorId) {
-        const commentIndex = vendor.comments.findIndex((c) => c.userId === 1); // Assuming userId is 1 for now
-        if (commentIndex !== -1) {
-          vendor.comments[commentIndex].comment = comment;
-        }
+  // Function to handle input change for individual vendors
+  const handleInputChange = (vendorId, field, value) => {
+    setVendorInputs({
+      ...vendorInputs,
+      [vendorId]: {
+        ...vendorInputs[vendorId],
+        [field]: value
       }
-      return vendor;
     });
-    setVendors(updatedVendors);
-    setCurrentVendor(null);
   };
 
   return (
-    <div>
-      {/* Admin Section for Vendor Creation */}
+    <Container>
+      <h1 className="my-4 text-center">Vendor Management</h1>
+      
       {isAdmin && (
-        <div>
-          <h2>Admin - Add Vendor</h2>
-          <input
-            type="text"
-            placeholder="New Vendor Name"
-            value={newVendorName}
-            onChange={(e) => setNewVendorName(e.target.value)}
-          />
-          <button onClick={addVendor}>Add Vendor</button>
-        </div>
+        <Row className="mb-5">
+          <Col md={6}>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Vendor ID</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter vendor ID"
+                  value={newVendorId}
+                  onChange={(e) => setNewVendorId(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Vendor Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter vendor name"
+                  value={newVendorName}
+                  onChange={(e) => setNewVendorName(e.target.value)}
+                />
+              </Form.Group>
+              <Button variant="primary" onClick={addVendor}>
+                Add Vendor
+              </Button>
+            </Form>
+          </Col>
+        </Row>
       )}
 
-      {/* Customer Section for Ranking and Commenting */}
-      <h2>Vendors</h2>
-      <ul>
-        {vendors.map((vendor) => (
-          <li key={vendor.id}>
-            <h3>{vendor.name}</h3>
-            <p>Average Ranking: {getAverageRanking(vendor)}</p>
-            <p>Customer Comments:</p>
-            <ul>
-              {vendor.comments.map((c, index) => (
-                <li key={index}>
-                  {c.comment} {c.userId === 1 && "(Your comment)"}
-                </li>
+      {/* Vendor List */}
+      <Row>
+        <Col>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Vendor ID</th>
+                <th>Vendor Name</th>
+                <th>Average Ranking</th>
+                <th>Comments</th>
+                <th>Add Comment & Ranking</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vendors.map((vendor, index) => (
+                <tr key={vendor.id}>
+                  <td>{index + 1}</td>
+                  <td>{vendor.id}</td>
+                  <td>{vendor.name}</td>
+                  <td>{vendor.ranking}</td>
+                  <td>
+                    <ul>
+                      {vendor.comments.map((comment, idx) => (
+                        <li key={idx}>
+                          {comment.comment} - <strong>Rating:</strong> {comment.ranking}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td>
+                    <Form.Group>
+                      <Form.Control
+                        type="text"
+                        placeholder="Add a comment"
+                        value={vendorInputs[vendor.id]?.comment || ''}
+                        onChange={(e) =>
+                          handleInputChange(vendor.id, 'comment', e.target.value)
+                        }
+                      />
+                      <Form.Control
+                        type="number"
+                        min="1"
+                        max="5"
+                        placeholder="Rank (1-5)"
+                        className="mt-2"
+                        value={vendorInputs[vendor.id]?.ranking || ''}
+                        onChange={(e) =>
+                          handleInputChange(vendor.id, 'ranking', e.target.value)
+                        }
+                      />
+                      <Button
+                        variant="success"
+                        className="mt-2"
+                        onClick={() => addCommentAndRanking(vendor.id)}
+                      >
+                        Submit
+                      </Button>
+                    </Form.Group>
+                  </td>
+                </tr>
               ))}
-            </ul>
-            <button onClick={() => setCurrentVendor(vendor)}>Rate & Comment</button>
-          </li>
-        ))}
-      </ul>
-
-      {/* Ranking & Comment Submission */}
-      {currentVendor && (
-        <div>
-          <h3>Rate & Comment for {currentVendor.name}</h3>
-          <label>Ranking (1-5):</label>
-          <input
-            type="number"
-            value={rank}
-            onChange={(e) => setRank(e.target.value)}
-            disabled={currentVendor.rankings.some((r) => r.userId === 1)} // Disable ranking if already submitted
-            min={1}
-            max={5}
-          />
-          <label>Comment:</label>
-          <input
-            type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
-          {!isCommentEditable ? (
-            <button onClick={() => submitRanking(currentVendor.id)}>Submit</button>
-          ) : (
-            <button onClick={() => editComment(currentVendor.id)}>Update Comment</button>
-          )}
-        </div>
-      )}
-    </div>
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

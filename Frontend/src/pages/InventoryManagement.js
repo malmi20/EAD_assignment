@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Col, Row, Card, InputGroup, Badge } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { BsSearch } from 'react-icons/bs';
 import Table from "../components/custom/CustomTable";
+import { AppContext } from "../context/AuthContext";
+
 
 function InventoryManager() {
+  const { user } = useContext(AppContext);
   const [inventoryData, setInventoryData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

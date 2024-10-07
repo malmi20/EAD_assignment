@@ -35,22 +35,22 @@ const Navbar = ({ hamActive, setHamActive }) => {
         <div className="d-flex align-items-center">
           {isAuthenticated && (
           <div className={styles.navLinksWrapper}>
-            <div className={styles.navLinksWrapper}>
+            {(user.assignedRoles.includes("VENDOR") || user.assignedRoles.includes("ADMIN") || user.assignedRoles.includes("CSR")) && <div className={styles.navLinksWrapper}>
               <Link to={"/OrderManagement"} className={`${styles.nav} center ${pathname === '/OrderManagement' && 'active'}`}>
                 Order Management
               </Link>
-            </div>
-            {(vendor || isAdmin) && <div className={styles.navLinksWrapper}>
+            </div>}
+            {(user.assignedRoles.includes("VENDOR") || user.assignedRoles.includes("ADMIN")) && <div className={styles.navLinksWrapper}>
               <Link to={"/productManager"} className={`${styles.nav} center ${pathname === '/productManager' && 'active'}`}>
                 Product Management
               </Link>
             </div>}
-            {(vendor || isAdmin) && <div className={styles.navLinksWrapper}>
+            {(user.assignedRoles.includes("ADMIN")) && <div className={styles.navLinksWrapper}>
               <Link to={"/VendorManagement"} className={`${styles.nav} center ${pathname === '/VendorManagement' && 'active'}`}>
                 Vendor Management
               </Link>
             </div>}
-            {isAdmin && <div className={styles.navLinksWrapper}>
+            {(user.assignedRoles.includes("ADMIN")) && <div className={styles.navLinksWrapper}>
               <Link to={"/InventoryManagement"} className={`${styles.nav} center ${pathname === '/InventoryManagement' && 'active'}`}>
                 Inventory Management
               </Link>

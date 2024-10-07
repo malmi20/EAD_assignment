@@ -29,11 +29,15 @@ const SignInForm = forwardRef((_props, ref) => {
       setIsLoading(true);
       const authData = await login(values);
       if (authData.status === 200) {
+        const authDataDetails = {...authData.data.details, assignedRoles: ["ADMIN", "VENDOR", "CSR"]};       
+        // const authDataDetails = {...authData.data.details, assignedRoles: ["CSR"]};  
+        // const authDataDetails = {...authData.data.details, assignedRoles: ["VENDOR"]};  
+        // const authDataDetails = {...authData.data.details, assignedRoles: ["ADMIN"]};       
         setSubmitting(false);
         setIsLoading(false);
         resetForm();
         notify("success", authData.data.message);
-        handleSignIn(authData.data.details);
+        handleSignIn(authDataDetails);
       } else {
         notify("error", authData?.data?.message);
       }

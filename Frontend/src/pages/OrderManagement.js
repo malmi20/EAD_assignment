@@ -2,6 +2,7 @@ import React, { useState,useContext } from "react";
 import { Form, Button, Table, Modal } from "react-bootstrap";
 import { AppContext } from "../context/AuthContext";
 
+
 function OrderManagement() {
   const initialOrder = {
     id: "",
@@ -112,7 +113,7 @@ function OrderManagement() {
       <h2>Order Management</h2>
 
       {/* Order Form */}
-      <Form onSubmit={handleSubmit} className="mb-4">
+      {user?.assignedRoles?.includes("VENDOR") && <Form onSubmit={handleSubmit} className="mb-4">
         <Form.Group controlId="customerName" className="mb-3">
           <Form.Label>Customer Name</Form.Label>
           <Form.Control
@@ -161,7 +162,7 @@ function OrderManagement() {
         <Button variant="secondary" className="ms-2" onClick={resetForm}>
           Clear
         </Button>
-      </Form>
+      </Form>}
 
       {/* Orders Table */}
       <Table striped bordered hover>

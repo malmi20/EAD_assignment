@@ -29,7 +29,7 @@ const Navbar = ({ hamActive, setHamActive }) => {
         <span className={styles.hamburgerLines}></span>
       </button>
       <Link to={"/"} className={`${styles.navLeft}`}>
-        <img src={logo} alt="logo" width={300} height={150} className={styles.brand} />
+        <img src={logo} alt="logo" width={100} height={90} className={styles.brand} />
       </Link>
       <div className={`${styles.navRight} center`}>
         <div className="d-flex align-items-center">

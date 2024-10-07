@@ -104,7 +104,7 @@ function ProductManager() {
       setCurrentState(defaultState);
       // fetchProductData();
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error submitting form :", error);
     } finally {
       setSubmitting(false);
     }

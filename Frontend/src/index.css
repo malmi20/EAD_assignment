@@ -90,3 +90,21 @@ li {
   
 }
 
+.img-upload{
+  display: none;
+}
+
+.img-upload-label{
+  display: flex;
+  /* justify-content: center;
+  align-items: center; */
+}
+
+.img-upload-label > img{
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+

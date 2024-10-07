@@ -14,6 +14,8 @@ const Home = () => {
   useEffect(() => {
     navigate("/productManager")
   })
+  console.log(user);
+  
   return (
     <Row>
       <Col md={12} className="bg-primary">

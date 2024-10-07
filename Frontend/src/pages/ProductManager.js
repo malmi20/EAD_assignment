@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Col, Row, Card, InputGroup, Badge } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { BsSearch } from 'react-icons/bs';
 import Table from "../components/custom/CustomTable";
 import CustomModal from "../components/custom/CustomModal";
-import SampleImg from '../assets/upload-img.png'
+import SampleImg from '../assets/upload-img.png';
+import { AppContext } from "../context/AuthContext";
+
 
 function ProductManager() {
+  const { user } = useContext(AppContext);
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const expenseData={img:""}
@@ -236,188 +239,203 @@ function ProductManager() {
     },
   ];
   
+  console.log(user);
+  
   return (
     <Row className="px-5 pt-4">
-      <Card body className="shadow p-3 mb-3 bg-white rounded">
-        <Card.Title>
-          <u>Product Management</u>
-        </Card.Title>
-        <Col md={12}>
-          <CustomModal
-            setShow={setShow}
-            show={show}
-            submitBtnVariant="danger"
-            submitAction={onDeleteHandler}
-            cancelAction={() => setSelectedItem(null)}
-          />
-          <Form
-            noValidate
-            onSubmit={(e) => {
-              e.preventDefault();
-              submitHandler(initialValues);
-            }}
-          >
-            <Row>
-              <Col md={4}>
-                <Form.Group controlId="name">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    name="name"
-                    value={initialValues.name}
-                    onChange={(e) =>
-                      setValues({ ...initialValues, name: e.target.value })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group controlId="description">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    name="description"
-                    value={initialValues.description}
-                    onChange={(e) =>
-                      setValues({
-                        ...initialValues,
-                        description: e.target.value,
-                      })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group controlId="price">
-                  <Form.Label>Price</Form.Label>
-                  <Form.Control
-                    name="price"
-                    type="number"
-                    value={initialValues.price}
-                    onChange={(e) =>
-                      setValues({ ...initialValues, price: e.target.value })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={4}>
-                <Form.Group controlId="quantity">
-                  <Form.Label>Quantity</Form.Label>
-                  <Form.Control
-                    name="quantity"
-                    type="number"
-                    value={initialValues.quantity}
-                    onChange={(e) =>
-                      setValues({ ...initialValues, quantity: e.target.value })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group controlId="category">
-                  <Form.Label>Category</Form.Label>
-                  <Form.Select
-                    name="category"
-                    value={initialValues.category}
-                    onChange={(e) =>
-                      setValues({ ...initialValues, category: e.target.value })
-                    }
-                  >
-                    <option value="">Select a category</option>
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={4}>
-                <Form.Group controlId="isActive">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label={initialValues.isActive ? "Active" : "Inactive"}
-                    checked={initialValues.isActive}
-                    onChange={(e) =>
-                      setValues({ ...initialValues, isActive: e.target.checked })
-                    }
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row className='mt-3'>
-              <Form.Label>Upload The Product Image</Form.Label>
-              <br/><br/>
-              <div className="img-wrapper">
-                  <label htmlFor="img-upload" className="img-upload-label">
-                      <img 
-                          src={expenseData.img != '' && file === null ? expenseData.img : file === null ? SampleImg : imagePreview} 
-                          id="expense-updateable-img"
-                      />
-                      <input 
-                          id="img-upload" 
-                          className="img-upload" 
-                          name="img-upload" 
-                          type="file" 
-                          accept="image/png, image/jpg, image/gif, image/jpeg"
-                          onChange={(e) => {
-                              const img = e.target.files[0];
-                              if (img) {
-                                  const reader = new FileReader();
-                                  reader.onloadend = () => {
-                                      setImagePreview(reader.result);
-                                  };
-                                  reader.readAsDataURL(img);
-                              }
-                              setFile(img);
-                          }}
-                          required
-                      />
-                  </label>
-              </div>
-            </Row>
-            <Row className="mt-2">
-              <Col className="d-flex justify-content-start">
-                {initialValues.name || initialValues.description || initialValues.price || initialValues.quantity ? (
-                  <Button variant="secondary" type="reset" onClick={resetForm}>
-                    Cancel
+      {
+        user?.assignedRoles?.includes("VENDOR") &&
+        <Card body className="shadow p-3 mb-3 bg-white rounded">
+          <Card.Title>
+            <u>Product Management</u>
+          </Card.Title>
+          <Col md={12}>
+            <CustomModal
+              setShow={setShow}
+              show={show}
+              submitBtnVariant="danger"
+              submitAction={onDeleteHandler}
+              cancelAction={() => setSelectedItem(null)}
+            />
+            <Form
+              noValidate
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitHandler(initialValues);
+              }}
+            >
+              <Row>
+                <Col md={4}>
+                  <Form.Group controlId="name">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      name="name"
+                      value={initialValues.name}
+                      onChange={(e) =>
+                        setValues({ ...initialValues, name: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={4}>
+                  <Form.Group controlId="description">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control
+                      name="description"
+                      value={initialValues.description}
+                      onChange={(e) =>
+                        setValues({
+                          ...initialValues,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={4}>
+                  <Form.Group controlId="price">
+                    <Form.Label>Price</Form.Label>
+                    <Form.Control
+                      name="price"
+                      type="number"
+                      value={initialValues.price}
+                      onChange={(e) =>
+                        setValues({ ...initialValues, price: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={4}>
+                  <Form.Group controlId="quantity">
+                    <Form.Label>Quantity</Form.Label>
+                    <Form.Control
+                      name="quantity"
+                      type="number"
+                      value={initialValues.quantity}
+                      onChange={(e) =>
+                        setValues({ ...initialValues, quantity: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={4}>
+                  <Form.Group controlId="category">
+                    <Form.Label>Category</Form.Label>
+                    <Form.Select
+                      name="category"
+                      value={initialValues.category}
+                      onChange={(e) =>
+                        setValues({ ...initialValues, category: e.target.value })
+                      }
+                    >
+                      <option value="">Select a category</option>
+                      {categories.map((category) => (
+                        <option key={category} value={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+                <Col md={4}>
+                  <Form.Group controlId="isActive">
+                    <Form.Label>Status</Form.Label>
+                    <Form.Check
+                      type="switch"
+                      id="custom-switch"
+                      label={initialValues.isActive ? "Active" : "Inactive"}
+                      checked={initialValues.isActive}
+                      onChange={(e) =>
+                        setValues({ ...initialValues, isActive: e.target.checked })
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row className='mt-3'>
+                <Form.Label>Upload The Product Image</Form.Label>
+                <br/><br/>
+                <div className="img-wrapper">
+                    <label htmlFor="img-upload" className="img-upload-label">
+                        <img 
+                            src={expenseData.img != '' && file === null ? expenseData.img : file === null ? SampleImg : imagePreview} 
+                            id="expense-updateable-img"
+                        />
+                        <input 
+                            id="img-upload" 
+                            className="img-upload" 
+                            name="img-upload" 
+                            type="file" 
+                            accept="image/png, image/jpg, image/gif, image/jpeg"
+                            onChange={(e) => {
+                                const img = e.target.files[0];
+                                if (img) {
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => {
+                                        setImagePreview(reader.result);
+                                    };
+                                    reader.readAsDataURL(img);
+                                }
+                                setFile(img);
+                            }}
+                            required
+                        />
+                    </label>
+                </div>
+              </Row>
+              <Row className="mt-2">
+                <Col className="d-flex justify-content-start">
+                  {initialValues.name || initialValues.description || initialValues.price || initialValues.quantity ? (
+                    <Button variant="secondary" type="reset" onClick={resetForm}>
+                      Cancel
+                    </Button>
+                  ) : null}
+                </Col>
+                <Col className="d-flex justify-content-end">
+                  <Button variant="primary" type="submit" disabled={isSubmitting}>
+                    {currentState}
                   </Button>
-                ) : null}
-              </Col>
-              <Col className="d-flex justify-content-end">
-                <Button variant="primary" type="submit" disabled={isSubmitting}>
-                  {currentState}
-                </Button>
+                </Col>
+              </Row>
+            </Form>
+          </Col>
+          <hr />
+          <Col md={12}>
+            <Row className="mt-4 d-flex justify-content-between">
+              <Col md={4}>
+                <InputGroup className="mb-3">
+                  <InputGroup.Text>
+                    <BsSearch />
+                  </InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    name="search"
+                    placeholder="Search by Name/Description/Category"
+                    onChange={onSearchHandler}
+                  />
+                </InputGroup>
               </Col>
             </Row>
-          </Form>
-        </Col>
-        <hr />
-        <Col md={12}>
-          <Row className="mt-4 d-flex justify-content-between">
-            <Col md={4}>
-              <InputGroup className="mb-3">
-                <InputGroup.Text>
-                  <BsSearch />
-                </InputGroup.Text>
-                <Form.Control
-                  type="text"
-                  name="search"
-                  placeholder="Search by Name/Description/Category"
-                  onChange={onSearchHandler}
-                />
-              </InputGroup>
-            </Col>
-          </Row>
-          {isLoading ? (
-            <div>Loading...</div>
-          ) : (
-            <Table nodes={tableData} columns={COLUMNS} />
-          )}
-        </Col>
-      </Card>
+            {isLoading ? (
+              <div>Loading...</div>
+            ) : (
+              <Table nodes={tableData} columns={COLUMNS} />
+            )}
+          </Col>
+        </Card>
+      }
+
+      {
+        user?.assignedRoles?.includes("ADMIN") &&
+        <Card body className="shadow p-3 mb-3 bg-white rounded">
+          <Card.Title>
+            <u>Categories Management</u>
+          </Card.Title>
+          <hr />
+        </Card>
+      }
     </Row>
   );
 }

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
+import { AppContext } from "../context/AuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Mock data for comments fetched from the backend
@@ -20,6 +21,7 @@ const mockVendorCredentials = {};
 
 // VendorManagement component
 const VendorManagement = ({ isAdmin }) => {
+  const { user } = useContext(AppContext);
   const [vendors, setVendors] = useState(vendorsData);
   const [newVendorId, setNewVendorId] = useState('');
   const [newVendorName, setNewVendorName] = useState('');

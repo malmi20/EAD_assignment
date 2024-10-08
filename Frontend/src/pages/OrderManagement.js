@@ -1,6 +1,7 @@
-import React, { useState,useContext } from "react";
+import React, { useState,useContext, useEffect } from "react";
 import { Form, Button, Table, Modal } from "react-bootstrap";
 import { AppContext } from "../context/AuthContext";
+import { getOrdersService } from "../services/orderService.js";
 
 
 function OrderManagement() {
@@ -108,6 +109,16 @@ function OrderManagement() {
     notifyCustomer(order.id, "Partially Delivered");
   };
 
+  const fetchOrders = async() => {
+    return getOrdersService().then(res => res);
+  }
+  
+  useEffect(() => {
+    fetchOrders().then(res => setOrders(res));
+  }, [])
+
+  console.log(orders);
+  
   return (
     <div className="container mt-5">
       <h2>Order Management</h2>
@@ -177,7 +188,7 @@ function OrderManagement() {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {orders?.map((order) => (
             <tr key={order.id}>
               <td>{order.id}</td>
               <td>{order.customerName}</td>

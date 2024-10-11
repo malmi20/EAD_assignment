@@ -4,27 +4,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.e_comandroidapp.adapters.ProductsAdapter;
+import com.example.e_comandroidapp.applicationState.AplicationState;
 import com.example.e_comandroidapp.events.OnProductCardClickListener;
 import com.example.e_comandroidapp.events.OnTextViewClickListener;
 import com.example.e_comandroidapp.models.Product;
 import com.example.e_comandroidapp.services.ApiClient;
 import com.example.e_comandroidapp.services.ApiService;
 import com.example.e_comandroidapp.adapters.CategoriesAdapter;
+import com.example.e_comandroidapp.sqlLite.DatabaseHelper;
+import com.example.e_comandroidapp.sqlLite.UserDatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//  bootstrapping point of the application/activity
 public class MainActivity extends AppCompatActivity implements OnTextViewClickListener, OnProductCardClickListener {
 
     ApiService apiService = ApiClient.getClient().create(ApiService.class);
@@ -35,12 +42,39 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
     ProductsAdapter productsAdapter;
     OnTextViewClickListener onTextViewClickListener = this;
     OnProductCardClickListener onProductCardClickListener = this;
+    AplicationState globalState;
+
+    UserDatabaseManager userManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        globalState = (AplicationState) getApplicationContext();
+
+        userManager = new UserDatabaseManager(this);
+        userManager.open();
+
+        // navigate to sign in activity if there is no valid user session
+        Cursor cursor = userManager.getAllUsers();
+        if (cursor.moveToFirst()) {
+            do {
+                String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
+                String token = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_ACCESS_TOKEN));
+                System.out.println("db userrrrrrrrrrrnmae main activity " + username + "..." + token);
+                if(Objects.equals(username, "none") && Objects.equals(token, "none")){
+                    System.out.println("to be navigate into login");
+                    Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            } while (cursor.moveToNext());
+        }else{
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         //bottom navigation bar handling
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -143,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
         startActivity(intent);
     }
 
+    //  filter products by category name
     public void fetchProductsWithCategoryName(String categoryName){
         Call<List<Product>> call_getProducts = apiService.fetchProductsByCategory(categoryName);
         call_getProducts.enqueue(new Callback<List<Product>>() {
@@ -162,10 +197,17 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
                 }
             }
 
+            //  excuted when the network request got failed
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 System.out.println("API_ERROR - " + "Failure: " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        userManager.close();
+        super.onDestroy();
     }
 }

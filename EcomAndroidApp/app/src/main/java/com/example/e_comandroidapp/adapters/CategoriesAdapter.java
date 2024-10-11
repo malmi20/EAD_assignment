@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+// Adapter for bind the data with categories buttons
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.MyViewHolder>{
     List<String> categories;
 
@@ -26,6 +27,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
         this.listener = listener;
     }
 
+    // defining the view holder for a single component
     @NonNull
     @Override
     public CategoriesAdapter.MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType){
@@ -34,12 +36,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
         return viewHolder;
     }
 
+    // bind th data to view holder
     public void onBindViewHolder (CategoriesAdapter.MyViewHolder holder, int position){
         String item = categories.get(position);
         holder.names.setText(categories.get(position));
         holder.bind(categories.get(position), listener);
     }
 
+    // get the number of count of all items
     @Override
     public int getItemCount(){return categories.size();}
 

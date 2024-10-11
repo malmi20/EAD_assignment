@@ -34,6 +34,7 @@ public class ProductInfoActivity extends AppCompatActivity {
         TextView productInfoRating = findViewById(R.id.product_info_rating);
         TextView productInfoDescription = findViewById(R.id.product_info_description);
 
+        // populate the data of the selected product
         productInfoTitle.setText(intent.getStringExtra("ptitle"));
         Picasso.get().load(intent.getStringExtra("pimage")).into(productInfoImage);
         productInfoTitleMini.setText(intent.getStringExtra("ptitle"));
@@ -62,10 +63,12 @@ public class ProductInfoActivity extends AppCompatActivity {
             return false;
         });
 
+        // find the bottom sheet by id
         dialog = new BottomSheetDialog(this);
         show = findViewById(R.id.add_feedbacks_button);
         createDialog();
 
+        // set the on click listener to the bottom sheet visible down
         show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +77,7 @@ public class ProductInfoActivity extends AppCompatActivity {
         });
     }
 
+    // populate the bottom sheet and display it
     public void createDialog(){
         View view = getLayoutInflater().inflate(R.layout.add_comment_bottom_sheet, null, false);
         dialog.setContentView(view);

@@ -1,5 +1,6 @@
 package com.example.e_comandroidapp.models;
 
+//Category model class
 public class Category {
     private String name;
 

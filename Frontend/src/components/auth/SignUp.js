@@ -113,9 +113,9 @@ const SignUpForm = forwardRef(({changeState}, ref) => {
               <Form.Group md="4" className="mt-1" controlId="isBusOwner">
                 <Form.Check
                   type="switch"
-                  name="isBusOwner"
+                  name="Admin"
                   id="custom-switch"
-                  label="Is Bus Owner"
+                  label="Admin"
                   value={values.isBusOwner}
                   onChange={handleChange}
                 />

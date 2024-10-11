@@ -20,11 +20,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.MyViewHolder> {
     List<OrderHistory> orderHistoryList;
 
     public OrderHistoryAdapter(List<OrderHistory> list){this.orderHistoryList = list;}
 
+    // defining the view holder for a single component
     @NonNull
     @Override
     public OrderHistoryAdapter.MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType){
@@ -33,6 +35,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         return viewHolder;
     }
 
+    // bind th data to view holder
     public void onBindViewHolder (OrderHistoryAdapter.MyViewHolder holder, int position){
 
         holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(
@@ -44,6 +47,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.order_states.setText(orderHistoryList.get(position).getOrderState());
     }
 
+    // get the number of count of all items
     @Override
     public int getItemCount(){return orderHistoryList.size();}
 

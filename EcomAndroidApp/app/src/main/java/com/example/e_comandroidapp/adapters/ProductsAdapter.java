@@ -26,6 +26,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
 
     public ProductsAdapter(List<Product> list, OnProductCardClickListener listener){this.products = list; this.listener = listener;}
 
+    // defining the view holder for a single component
     @NonNull
     @Override
     public ProductsAdapter.MyViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType){
@@ -34,6 +35,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
         return viewHolder;
     }
 
+    // bind th data to view holder
     public void onBindViewHolder (ProductsAdapter.MyViewHolder holder, int position){
 
         holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(
@@ -55,6 +57,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
         holder.bind(products.get(position),listener);
     }
 
+    // get the number of count of all items
     @Override
     public int getItemCount(){return products.size();}
 
@@ -74,9 +77,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
 
         // Bind data to views and set click listeners
         public void bind(final Product data, final OnProductCardClickListener listener) {
-//            textViewId.setText(data);
-//            textViewName.setText("Name: " + data.getName());
-
             // Set click listeners for each TextView
             productCard.setOnClickListener(new View.OnClickListener() {
                 @Override

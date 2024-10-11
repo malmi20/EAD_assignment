@@ -1,5 +1,6 @@
 package com.example.e_comandroidapp.models;
 
+// Product model class
 public class Product {
     private int id;
     private String title;

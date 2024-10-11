@@ -2,6 +2,7 @@ package com.example.e_comandroidapp.models;
 
 import java.util.Date;
 
+// Order history model class
 public class OrderHistory {
     private String date;
     private double subTotal;

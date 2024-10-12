@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,6 +36,7 @@ public class ProductInfoActivity extends AppCompatActivity {
         TextView productInfoDescription = findViewById(R.id.product_info_description);
 
         // populate the data of the selected product
+        String productId = intent.getStringExtra("pid");
         productInfoTitle.setText(intent.getStringExtra("ptitle"));
         Picasso.get().load(intent.getStringExtra("pimage")).into(productInfoImage);
         productInfoTitleMini.setText(intent.getStringExtra("ptitle"));
@@ -75,11 +77,38 @@ public class ProductInfoActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        //add to cart listener
+        Button addToCartButton = findViewById(R.id.product_info_button_addToCart);
+        addToCartButton.setOnClickListener(item -> {
+            addToCart("userid001", productId);
+        });
     }
 
     // populate the bottom sheet and display it
     public void createDialog(){
         View view = getLayoutInflater().inflate(R.layout.add_comment_bottom_sheet, null, false);
         dialog.setContentView(view);
+
+        // This returns the rating as a float out of 5  from rating bar
+        RatingBar ratingBar = view.findViewById(R.id.product_feedback_rating_bar);
+        EditText etFeedback = view.findViewById(R.id.vendor_comment_input);
+
+        Button postFeedbackButton = view.findViewById(R.id.vendor_comment_post_btn);
+        postFeedbackButton.setOnClickListener(item -> {
+            float rating = ratingBar.getRating();
+            String commentText = etFeedback.getText().toString();
+            postFeedback("", "", commentText, rating);
+        });
+    }
+
+    //add product to the user cart
+    private void addToCart(String userid, String productId){
+        System.out.println("adding to cart..\t" + userid + "..\t.." + productId);
+    }
+
+    //post a feedback with rating
+    private void postFeedback(String userId, String productId, String comment, float rating){
+        System.out.println("post feedback... " + userId + " " + productId + " " + comment + " " + rating);
     }
 }

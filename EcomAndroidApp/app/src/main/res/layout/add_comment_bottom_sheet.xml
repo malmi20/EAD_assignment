@@ -21,6 +21,13 @@
         android:hint="Feedback"
         android:inputType="textMultiLine" />
 
+    <RatingBar
+        android:id="@+id/product_feedback_rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:numStars="5" />
+
     <Button
         android:id="@+id/vendor_comment_post_btn"
         android:layout_width="180dp"

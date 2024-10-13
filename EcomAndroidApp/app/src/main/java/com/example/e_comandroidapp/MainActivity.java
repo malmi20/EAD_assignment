@@ -15,6 +15,7 @@ import com.example.e_comandroidapp.adapters.ProductsAdapter;
 import com.example.e_comandroidapp.applicationState.AplicationState;
 import com.example.e_comandroidapp.events.OnProductCardClickListener;
 import com.example.e_comandroidapp.events.OnTextViewClickListener;
+import com.example.e_comandroidapp.models.Category;
 import com.example.e_comandroidapp.models.Product;
 import com.example.e_comandroidapp.services.ApiClient;
 import com.example.e_comandroidapp.services.ApiService;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
 
     ApiService apiService = ApiClient.getClient().create(ApiService.class);
     RecyclerView categoriesHorizontalview, productsVerticalView;
-    List<String> categoryList = new ArrayList<>();
+    List<Category> categoryList = new ArrayList<>();
     List<Product> productList = new ArrayList<>();
     CategoriesAdapter adapter;
     ProductsAdapter productsAdapter;
@@ -96,10 +97,12 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
         });
 
         // Call the API to get categories
-        Call<List<String>> call = apiService.fetchCategories();
-        call.enqueue(new Callback<List<String>>() {
+        Call<List<Category>> call = apiService.fetchCategories();
+        call.enqueue(new Callback<List<Category>>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                System.out.println("response category get ++++++++++");
+                System.out.println(response.body());
                 if (response.isSuccessful()) {
                     Log.d("RAW_RESPONSE", response.body().toString());
                     categoryList = response.body();
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(Call<List<Category>> call, Throwable t) {
                 System.out.println("API_ERROR - " + "Failure: " + t.getMessage());
             }
         });
@@ -123,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
         call_getProducts.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                System.out.println("response product get ++++++++++");
+                System.out.println(response.body());
                 if (response.isSuccessful()) {
                     Log.d("RAW_RESPONSE", response.body().toString());
                     productList = response.body();
@@ -168,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements OnTextViewClickLi
         System.out.println(product);
         Intent intent = new Intent(MainActivity.this, ProductInfoActivity.class);
         intent.putExtra("pid", String.valueOf(product.getId()));
+        intent.putExtra("pname", product.getName());
         intent.putExtra("ptitle", product.getTitle());
         intent.putExtra("pprice", String.valueOf(product.getPrice()));
         intent.putExtra("pdescription", product.getDescription());

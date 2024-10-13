@@ -37,7 +37,7 @@ public class ProductInfoActivity extends AppCompatActivity {
 
         // populate the data of the selected product
         String productId = intent.getStringExtra("pid");
-        productInfoTitle.setText(intent.getStringExtra("ptitle"));
+        productInfoTitle.setText(intent.getStringExtra("pname"));
         Picasso.get().load(intent.getStringExtra("pimage")).into(productInfoImage);
         productInfoTitleMini.setText(intent.getStringExtra("ptitle"));
         productInfoPrice.setText("$" + intent.getStringExtra("pprice"));

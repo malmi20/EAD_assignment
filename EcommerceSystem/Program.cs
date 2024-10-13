@@ -41,6 +41,7 @@ builder.Services.AddAuthentication(options =>
 
 
 //services registration ----------------------------------------------------------------
+builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddSingleton<InventoryService>();

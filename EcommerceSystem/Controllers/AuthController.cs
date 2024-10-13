@@ -44,6 +44,11 @@ namespace EcommerceSystem.Controllers
 
             var user = new ApplicationUser
             {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                UserName = model.UserName,
+                Address = model.Address,
+                ContactNo = model.ContactNo,
                 Email = model.Email,
                 Roles = model.Roles // Assign roles during registration
             };
@@ -74,6 +79,8 @@ namespace EcommerceSystem.Controllers
             // Return the token and the user's role
             return Ok(new
             {
+                ID = user.Id,
+                FullName = user.FirstName + " " + user.LastName,
                 Token = token,
                 Role = user.Roles
             });

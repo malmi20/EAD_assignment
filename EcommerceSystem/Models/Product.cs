@@ -14,14 +14,22 @@ namespace EcommerceSystem.Models
     public class Product
     {
         [BsonId]
-        public ObjectId _id { get; set; } // MongoDB automatically generates this ID
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } // MongoDB automatically generates this ID
 
         public string Name { get; set; }
+
+        public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
 
+        public string Category { get; set; }
+        public string Image { get; set; }
+
+        public double RatingValue { get; set; }
+
         [BsonRepresentation(BsonType.ObjectId)]
-        public string CategoryID { get; set; } // Ensure this ID is correctly linked to the Category
+        public string CategoryID { get; set; } = ""; // Ensure this ID is correctly linked to the Category
 
         public bool IsActive { get; set; } // Determines if the product is active
     }

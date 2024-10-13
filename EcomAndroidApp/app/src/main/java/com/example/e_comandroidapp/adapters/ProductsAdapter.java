@@ -49,7 +49,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.MyView
         if(formattedTitle.length() > 35){
             formattedTitle = formattedTitle.substring(0, 33) + "...";
         }
-        holder.prod_names.setText("Product Name");
+        holder.prod_names.setText(products.get(position).getName());
         holder.prod_prices.setText("$"+String.valueOf(products.get(position).getPrice()));
         holder.prod_titles.setText(formattedTitle);
         holder.prod_categories.setText(products.get(position).getCategory());

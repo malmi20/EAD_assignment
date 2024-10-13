@@ -32,6 +32,14 @@ namespace EcommerceSystem.Controllers
             return Ok(products);
         }
 
+        // Get all products by category
+        [HttpGet("filter/{category}")]
+        public async Task<IActionResult> GetProductsByCategory(string category)
+        {
+            var products = await _productService.GetProductsByCategoryAsync(category);
+            return Ok(products);
+        }
+
         // Get product by MongoDB generated _id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(string id)
@@ -47,7 +55,7 @@ namespace EcommerceSystem.Controllers
         public async Task<IActionResult> CreateProduct([FromBody] Product product)
         {
             await _productService.CreateProductAsync(product);
-            return CreatedAtAction(nameof(GetProductById), new { id = product._id.ToString() }, product);
+            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
 
         // Update an existing product
@@ -58,7 +66,7 @@ namespace EcommerceSystem.Controllers
             if (existingProduct == null)
                 return NotFound();
 
-            updatedProduct._id = existingProduct._id; // Ensure the existing _id is retained
+            updatedProduct.Id = existingProduct.Id; // Ensure the existing _id is retained
             await _productService.UpdateProductAsync(id, updatedProduct);
             return Ok(updatedProduct);
         }

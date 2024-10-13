@@ -70,25 +70,24 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void registerUser(String firstName, String lastName, String userName, String userPassword, String email, String address, String contact){
-        RegisterUserRequest request = new RegisterUserRequest(firstName, lastName, 34);
-        apiService.signUp(request).enqueue(new Callback<RegisterUserResponse>() {
+        RegisterUserRequest request = new RegisterUserRequest(firstName, lastName, userName, email, userPassword, userPassword, address, contact);
+        apiService.signUp(request).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<RegisterUserResponse> call, Response<RegisterUserResponse> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 System.out.println(response.body());
                 if (response.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "Sign-up successful", Toast.LENGTH_SHORT).show();
                     System.out.println(response.body());
-                    System.out.println("gbbbbbbbbbbb\t"+response.body().getFirstName()+"\t"+response.body().getLastName());
-//                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
                 } else {
                     Toast.makeText(SignUpActivity.this, "Sign-up failed", Toast.LENGTH_SHORT).show();
                 }
+                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                startActivity(intent);
+                finish();
             }
 
             @Override
-            public void onFailure(Call<RegisterUserResponse> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Toast.makeText(SignUpActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

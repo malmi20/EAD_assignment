@@ -88,15 +88,18 @@ public class SignInActivity extends AppCompatActivity {
     //make request to sign-in user
     private void loginUser(String username, String password) {
         LoginRequest request = new LoginRequest(username, password);
+        System.out.println("login req ++++++++++++++ ");
+        System.out.println(request);
         apiService.login(request).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                System.out.println(response.body());
+                System.out.println("response login ++++++++++");
+                System.out.println(response);
                 if (response.isSuccessful()) {
                     Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
-                    System.out.println("gbbbbbbbbbbb\t"+response.body().getUsername()+"\t"+response.body().getAccessToken());
+                    System.out.println("gbbbbbbbbbbb\t"+response.body().getFullName());
 //                    userManager.addUserSession(response.body().getUsername(), response.body().getAccessToken());
-                    userManager.updateFirstRecord(response.body().getUsername(), response.body().getAccessToken());
+                    userManager.updateFirstRecord(response.body().getFullName(), response.body().getToken());
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

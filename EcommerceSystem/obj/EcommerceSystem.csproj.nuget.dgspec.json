@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\EAD_PROJECT\\EcommerceSystem\\EcommerceSystem.csproj": {}
+    "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\EcommerceSystem.csproj": {}
   },
   "projects": {
-    "D:\\EAD_PROJECT\\EcommerceSystem\\EcommerceSystem.csproj": {
+    "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\EcommerceSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\EAD_PROJECT\\EcommerceSystem\\EcommerceSystem.csproj",
+        "projectUniqueName": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\EcommerceSystem.csproj",
         "projectName": "EcommerceSystem",
-        "projectPath": "D:\\EAD_PROJECT\\EcommerceSystem\\EcommerceSystem.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\EAD_PROJECT\\EcommerceSystem\\obj\\",
+        "projectPath": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\EcommerceSystem.csproj",
+        "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
+        "outputPath": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -34,6 +35,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -79,7 +85,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -91,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

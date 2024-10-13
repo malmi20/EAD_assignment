@@ -1,135 +1,92 @@
 package com.example.e_comandroidapp.dto;
 
-//public class RegisterUserRequest {
-//    private String firstName;
-//    private String lastName;
-//    private String userName;
-//    private String userPassword;
-//    private String email;
-//    private String address;
-//    private String contact;
-//
-//    public RegisterUserRequest(String firstName, String lastName, String userName, String userPassword, String email, String address, String contact) {
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.userName = userName;
-//        this.userPassword = userPassword;
-//        this.email = email;
-//        this.address = address;
-//        this.contact = contact;
-//    }
-//
-//    public void setFirstName(String firstName) {
-//        this.firstName = firstName;
-//    }
-//
-//    public void setLastName(String lastName) {
-//        this.lastName = lastName;
-//    }
-//
-//    public void setUserName(String userName) {
-//        this.userName = userName;
-//    }
-//
-//    public void setUserPassword(String userPassword) {
-//        this.userPassword = userPassword;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public void setAddress(String address) {
-//        this.address = address;
-//    }
-//
-//    public void setContact(String contact) {
-//        this.contact = contact;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public String getUserName() {
-//        return userName;
-//    }
-//
-//    public String getUserPassword() {
-//        return userPassword;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public String getAddress() {
-//        return address;
-//    }
-//
-//    public String getContact() {
-//        return contact;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "RegisterUserRequest{" +
-//                "firstName='" + firstName + '\'' +
-//                ", lastName='" + lastName + '\'' +
-//                ", userName='" + userName + '\'' +
-//                ", userPassword='" + userPassword + '\'' +
-//                ", email='" + email + '\'' +
-//                ", address='" + address + '\'' +
-//                ", contact='" + contact + '\'' +
-//                '}';
-//    }
-//}
-
 public class RegisterUserRequest {
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    private String FirstName;
+    private String LastName;
 
-    private String firstName;
-    private String lastName;
-    private int age;
+    private String UserName;
+    private String Email;
+    private String Password;
+    private String ConfirmPassword;
+    private String Address;
+    private String ContactNo;
 
-    public RegisterUserRequest(String firstName, String lastName, int age) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
+
+    public RegisterUserRequest(String firstName, String lastName, String userName, String email, String password, String confirmPassword, String address, String contactNo) {
+        FirstName = firstName;
+        LastName = lastName;
+        UserName = userName;
+        Email = email;
+        Password = password;
+        ConfirmPassword = confirmPassword;
+        Address = address;
+        ContactNo = contactNo;
     }
 
     public String getFirstName() {
-        return firstName;
+        return FirstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return LastName;
     }
 
-    public int getAge() {
-        return age;
+    public String getUserName() {
+        return UserName;
     }
 
-    @Override
-    public String toString() {
-        return "RegisterUserRequest{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", age=" + age +
-                '}';
+    public String getEmail() {
+        return Email;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public String getConfirmPassword() {
+        return ConfirmPassword;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public String getContactNo() {
+        return ContactNo;
+    }
+
+    public void setFirstName(String firstName) {
+        FirstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        LastName = lastName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        ConfirmPassword = confirmPassword;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public void setContactNo(String contactNo) {
+        ContactNo = contactNo;
     }
 }
+

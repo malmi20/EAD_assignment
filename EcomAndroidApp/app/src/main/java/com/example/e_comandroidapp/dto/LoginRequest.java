@@ -1,11 +1,19 @@
 package com.example.e_comandroidapp.dto;
 
 public class LoginRequest {
-    private String username;
-    private String password;
+    private String Email;
+    private String Password;
 
-    public LoginRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public LoginRequest(String email, String password) {
+        Email = email;
+        Password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginRequest{" +
+                "Email='" + Email + '\'' +
+                ", Password='" + Password + '\'' +
+                '}';
     }
 }

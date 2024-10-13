@@ -27,11 +27,15 @@ namespace EcommerceSystem.Services
         public async Task<List<Product>> GetProductsAsync() =>
             await _products.Find(product => true).ToListAsync();
 
+        // Get all products by category
+        public async Task<List<Product>> GetProductsByCategoryAsync(string category) =>
+            await _products.Find(product => product.Category == category).ToListAsync();
+
         // Get product by MongoDB generated _id
         public async Task<Product> GetProductByIdAsync(string id)
         {
             var objectId = new ObjectId(id); // Convert string id to ObjectId
-            return await _products.Find(product => product._id == objectId).FirstOrDefaultAsync();
+            return await _products.Find(product => product.Id == objectId.ToString()).FirstOrDefaultAsync();
         }
 
         // Create a new product
@@ -42,14 +46,14 @@ namespace EcommerceSystem.Services
         public async Task UpdateProductAsync(string id, Product updatedProduct)
         {
             var objectId = new ObjectId(id); // Convert string id to ObjectId
-            await _products.ReplaceOneAsync(product => product._id == objectId, updatedProduct);
+            await _products.ReplaceOneAsync(product => product.Id == objectId.ToString(), updatedProduct);
         }
 
         // Delete a product by _id
         public async Task DeleteProductAsync(string id)
         {
             var objectId = new ObjectId(id); // Convert string id to ObjectId
-            await _products.DeleteOneAsync(product => product._id == objectId);
+            await _products.DeleteOneAsync(product => product.Id == objectId.ToString());
         }
 
         // Activate a product
@@ -57,7 +61,7 @@ namespace EcommerceSystem.Services
         {
             var objectId = new ObjectId(id); // Convert string id to ObjectId
             await _products.UpdateOneAsync(
-                product => product._id == objectId,
+                product => product.Id == objectId.ToString(),
                 Builders<Product>.Update.Set(p => p.IsActive, true)
             );
         }
@@ -67,7 +71,7 @@ namespace EcommerceSystem.Services
         {
             var objectId = new ObjectId(id); // Convert string id to ObjectId
             await _products.UpdateOneAsync(
-                product => product._id == objectId,
+                product => product.Id == objectId.ToString(),
                 Builders<Product>.Update.Set(p => p.IsActive, false)
             );
         }

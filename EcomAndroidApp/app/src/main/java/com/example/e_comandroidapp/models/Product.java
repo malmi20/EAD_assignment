@@ -2,28 +2,39 @@ package com.example.e_comandroidapp.models;
 
 // Product model class
 public class Product {
-    private int id;
+    private String id;
+
+    private String categoryID = "";
+
+    private String name;
+    private ComprehensiveId _id;
     private String title;
     private double price;
     private String description;
     private String category;
     private String image;
-    private Rate rating;
+    private Rate rating = new Rate(3, 3);
+
+    private double ratingValue;
 
     public Product() {
     }
 
-    public Product(int id, String title, double price, String description, String category, String image, Rate rating) {
+    public Product(String id, ComprehensiveId _id, String name, String title, double price, String description, String category, String image, Rate rating, double ratingValue) {
+        this.name = name;
         this.id = id;
+        this._id = _id;
         this.title = title;
         this.price = price;
         this.description = description;
         this.category = category;
         this.image = image;
         this.rating = rating;
+        this.ratingValue = ratingValue;
     }
 
-    public int getId() {
+
+    public String getId() {
         return id;
     }
 
@@ -53,7 +64,7 @@ public class Product {
 
     public double getRatingValue(){return  this.rating.getRate();}
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -81,16 +92,41 @@ public class Product {
         this.rating = rating;
     }
 
+
+    public ComprehensiveId get_id() {
+        return _id;
+    }
+
+    public void set_id(ComprehensiveId _id) {
+        this._id = _id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRatingValue(double ratingValue) {
+        this.ratingValue = ratingValue;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
+                ", categoryID='" + categoryID + '\'' +
+                ", name='" + name + '\'' +
+                ", _id=" + _id +
                 ", title='" + title + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", image='" + image + '\'' +
                 ", rating=" + rating +
+                ", ratingValue=" + ratingValue +
                 '}';
     }
 }
@@ -121,5 +157,72 @@ class Rate{
 
     public void setCount(int count) {
         this.count = count;
+    }
+}
+
+class ComprehensiveId{
+    private int timestamp;
+    private int machine;
+    private int pid;
+    private int increment;
+    private String creationTime;
+
+    public ComprehensiveId(int timestamp, int machine, int pid, int increment, String creationTime) {
+        this.timestamp = timestamp;
+        this.machine = machine;
+        this.pid = pid;
+        this.increment = increment;
+        this.creationTime = creationTime;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public int getMachine() {
+        return machine;
+    }
+
+    public int getPid() {
+        return pid;
+    }
+
+    public int getIncrement() {
+        return increment;
+    }
+
+    public String getCreationTime() {
+        return creationTime;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setMachine(int machine) {
+        this.machine = machine;
+    }
+
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
+
+    public void setIncrement(int increment) {
+        this.increment = increment;
+    }
+
+    public void setCreationTime(String creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ComprehensiveId{" +
+                "timestamp=" + timestamp +
+                ", machine=" + machine +
+                ", pid=" + pid +
+                ", increment=" + increment +
+                ", creationTime='" + creationTime + '\'' +
+                '}';
     }
 }

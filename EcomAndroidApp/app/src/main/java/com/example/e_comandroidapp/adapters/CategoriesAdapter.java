@@ -18,11 +18,11 @@ import java.util.List;
 
 // Adapter for bind the data with categories buttons
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.MyViewHolder>{
-    List<String> categories;
+    List<Category> categories;
 
     private OnTextViewClickListener listener;
 
-    public CategoriesAdapter(List<String> list, OnTextViewClickListener listener){
+    public CategoriesAdapter(List<Category> list, OnTextViewClickListener listener){
         this.categories = list;
         this.listener = listener;
     }
@@ -38,9 +38,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
 
     // bind th data to view holder
     public void onBindViewHolder (CategoriesAdapter.MyViewHolder holder, int position){
-        String item = categories.get(position);
-        holder.names.setText(categories.get(position));
-        holder.bind(categories.get(position), listener);
+//        String item = categories.get(position);
+        holder.names.setText(categories.get(position).getName());
+        holder.bind(categories.get(position).getName(), listener);
     }
 
     // get the number of count of all items

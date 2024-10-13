@@ -16,19 +16,21 @@ import retrofit2.http.Path;
 
 // calling the API endpoint as form of api service
 public interface ApiService {
-    @GET("products/categories")
-    Call<List<String>> fetchCategories();
+    @GET("category")
+    Call<List<Category>> fetchCategories();
 
-    @GET("products")
+    @GET("product")
     Call<List<Product>> fetchProducts();
 
     ///products/category/jewelery
-    @GET("products/category/{categoryName}")
+    @GET("product/filter/{categoryName}")
     Call<List<Product>> fetchProductsByCategory(@Path("categoryName") String categoryName);
 
-    @POST("login")
+    @POST("auth/login")
     Call<LoginResponse> login(@Body LoginRequest request);
 
-    @POST("add")
-    Call<RegisterUserResponse> signUp(@Body RegisterUserRequest request);
+    // auth/register
+    @POST("auth/register")
+    Call<String> signUp(@Body RegisterUserRequest request);
+
 }

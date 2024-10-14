@@ -4,11 +4,15 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { BsSearch } from 'react-icons/bs';
 import Table from "../components/custom/CustomTable";
+import { getInventoryService } from '../services/inventoryService';
+import { getProductsService } from '../services/productService';
+import { notify } from '../components/custom/ToastMessage';
 
 
 function InventoryManager() {
   const [inventoryData, setInventoryData] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [productData, setProductData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -16,14 +20,27 @@ function InventoryManager() {
 
   useEffect(() => {
     fetchInventoryData();
+    fetchProductData();
   }, []);
+
+  const fetchProductData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getProductsService();
+      setProductData(response);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const fetchInventoryData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetchProducts(); // Fetch inventory (same as product data, but focus on stock)
-      setInventoryData(response.data.details);
-      setTableData(response.data.details);
+      const response = await getInventoryService(); // Fetch inventory (same as product data, but focus on stock)
+      setInventoryData(response);
+      setTableData(response);
     } catch (error) {
       console.error("Error fetching inventory data:", error);
     } finally {
@@ -31,18 +48,6 @@ function InventoryManager() {
     }
   };
 
-  const fetchProducts = async () => {
-    // Mock data (replace this with actual API call)
-    return {
-      data: {
-        details: [
-          { id: "prod_001", name: 'Product 1', price: 10.99, quantity: 10, category: 'Electronics' },
-          { id: "prod_002", name: 'Product 2', price: 9.99, quantity: 3, category: 'Clothing' },
-          { id: "prod_003", name: 'Product 3', price: 12.99, quantity: 0, category: 'Home' },
-        ],
-      },
-    };
-  };
 
   const onSearchHandler = (e) => {
     const query = e.target.value.toLowerCase();
@@ -50,8 +55,8 @@ function InventoryManager() {
       query
         ? inventoryData.filter(
             (item) =>
-              item.name.toLowerCase().includes(query) ||
-              item.category.toLowerCase().includes(query)
+              productData?.find((p) => p.id === item.productId)?.name?.toLowerCase()?.includes(query) ||
+              productData?.find((p) => p.id === item.productId)?.category?.toLowerCase()?.includes(query)
           )
         : inventoryData
     );
@@ -60,26 +65,28 @@ function InventoryManager() {
   const handleStockUpdate = async () => {
     setIsSubmitting(true);
     try {
-      const updatedProduct = { ...selectedProduct, quantity: selectedProduct.quantity + stockUpdate };
-      // Update stock in database or API
-      console.log('Updated product stock:', updatedProduct);
+      // const updatedProduct = { ...selectedProduct, quantity: selectedProduct.quantity + stockUpdate };
+      // // Update stock in database or API
+      // console.log('Updated product stock:', updatedProduct);
+      // await updateInventoryService(selectedProduct.id, stockUpdate);
       // Simulate API response and refresh inventory data
       fetchInventoryData();
       setSelectedProduct(null);
       setStockUpdate(0);
+      notify('success' ,'Stock updated successfully!');
     } catch (error) {
+      notify('error' ,'Error updating stock!');
       console.error('Error updating stock:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
-
   const COLUMNS = [
-    { label: "ID", renderCell: (item) => item.id },
-    { label: "Name", renderCell: (item) => item.name },
-    { label: "Price", renderCell: (item) => `$${item.price.toFixed(2)}` },
+    // { label: "ID", renderCell: (item) => item._id },
+    { label: "Name", renderCell: (item) => productData?.find((p) => p.id === item.productId)?.name },
+    { label: "Price", renderCell: (item) => `$${productData?.find(p => p.id === item.productId)?.price?.toFixed(2) || 0.00}`},
     { label: "Quantity", renderCell: (item) => item.quantity },
-    { label: "Category", renderCell: (item) => item.category },
+    { label: "Category", renderCell: (item) => productData?.find((p) => p.id === item.productId)?.category },
     { label: "Stock Status", renderCell: (item) => (
       <Badge bg={item.quantity > 5 ? "success" : item.quantity > 0 ? "warning" : "danger"}>
         {item.quantity > 5 ? "In Stock" : item.quantity > 0 ? "Low Stock" : "Out of Stock"}

@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|d:\\my-projects\\ead_project\\ead_assignment\\ecommercesystem\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|solutionrelative:services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|d:\\my-projects\\ead_project\\ead_assignment\\ecommercesystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|d:\\my-projects\\ead_project\\ead_assignment\\ecommercesystem\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|solutionrelative:controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|d:\\my-projects\\ead_project\\ead_assignment\\ecommercesystem\\models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|solutionrelative:models\\product.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|d:\\my-projects\\ead_project\\ead_assignment\\ecommercesystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFF92D92-A6A2-400D-9234-4514C33DCE47}|EcommerceSystem.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,40 +23,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProductService.cs",
-              "DocumentMoniker": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Services\\ProductService.cs",
-              "RelativeDocumentMoniker": "Services\\ProductService.cs",
-              "ToolTip": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Services\\ProductService.cs",
-              "RelativeToolTip": "Services\\ProductService.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAUwEkAAAA8AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-13T00:01:48.856Z",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABEAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-14T14:29:52.397Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ProductController.cs",
-              "DocumentMoniker": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Controllers\\ProductController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ProductController.cs",
-              "ToolTip": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Controllers\\ProductController.cs",
-              "RelativeToolTip": "Controllers\\ProductController.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAowEQAAAAyAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAIwBUAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-12T23:59:46.514Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Product.cs",
-              "DocumentMoniker": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Models\\Product.cs",
-              "RelativeDocumentMoniker": "Models\\Product.cs",
-              "ToolTip": "D:\\my-projects\\EAD_project\\EAD_assignment\\EcommerceSystem\\Models\\Product.cs",
-              "RelativeToolTip": "Models\\Product.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAIwA4AAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-12T23:58:40.759Z",
+              "WhenOpened": "2024-10-14T13:17:36.861Z",
               "EditorCaption": ""
             }
           ]

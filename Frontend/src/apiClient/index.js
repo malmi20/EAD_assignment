@@ -2,9 +2,12 @@ import axios from "axios";
 
 // Create an Axios instance with default settings
 const apiClient = axios.create({
-    baseURL: "http://localhost:5038/api",
+    baseURL: "http://localhost:7163/api",
     headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin" : "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTION",
+        "Access-Control-Allow-Headers": "Content-Type"
     },
 });
 

@@ -22,8 +22,8 @@ const mockVendorCredentials = {};
 // VendorManagement component
 const VendorManagement = () => {
   const { user } = useContext(AppContext);
-  const isAdmin = user?.assignedRoles.includes("ADMIN");
-  const vendor =  user?.assignedRoles.includes("VENDOR");
+  const isAdmin = user?.assignedRoles?.includes("ADMIN");
+  const vendor =  user?.assignedRoles?.includes("VENDOR");
   const [vendors, setVendors] = useState(vendorsData);
   const [newVendorId, setNewVendorId] = useState('');
   const [newVendorName, setNewVendorName] = useState('');

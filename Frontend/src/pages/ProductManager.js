@@ -16,8 +16,8 @@ function ProductManager() {
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const expenseData={img:""}
-  const isAdmin = user?.assignedRoles.includes("ADMIN");
-  const vendor =  user?.assignedRoles.includes("VENDOR");
+  const isAdmin = user?.assignedRoles?.includes("ADMIN");
+  const vendor =  user?.assignedRoles?.includes("VENDOR");
   const initialData = {
     id: "",
     name: "",
@@ -111,9 +111,9 @@ function ProductManager() {
       query
         ? productData.filter(
             (item) =>
-              item.name.toLowerCase().includes(query) ||
-              item.description.toLowerCase().includes(query) ||
-              item.category.toLowerCase().includes(query)
+              item.name.toLowerCase()?.includes(query) ||
+              item.description.toLowerCase()?.includes(query) ||
+              item.category.toLowerCase()?.includes(query)
           )
         : productData
     );

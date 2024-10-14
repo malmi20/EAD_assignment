@@ -7,9 +7,9 @@ import logo from "../../assets/logo.png"
 
 const Navbar = ({ hamActive, setHamActive }) => {
   const { handleSignOut, isAuthenticated,user } = useContext(AppContext);
-  const isAdmin = user?.assignedRoles.includes("ADMIN");
-  const vendor =  user?.assignedRoles.includes("VENDOR");
-  const csr =  user?.assignedRoles.includes("CSR");
+  const isAdmin = user?.assignedRoles?.includes("ADMIN");
+  const vendor =  user?.assignedRoles?.includes("VENDOR");
+  const csr =  user?.assignedRoles?.includes("CSR");
 
   const location = useLocation();
   const { pathname } = location;

@@ -7,8 +7,8 @@ const NavbarResponsive = ({ hamActive }) => {
   const { user } = useContext(AppContext);
   const location = useLocation();
   const { pathname } = location;
-  const isAdmin = user?.assignedRoles.includes("ADMIN");
-  const vendor =  user?.assignedRoles.includes("VENDOR");
+  const isAdmin = user?.assignedRoles?.includes("ADMIN");
+  const vendor =  user?.assignedRoles?.includes("VENDOR");
   return (
     <div className={`${styles.navResWrapper} ${hamActive && styles.open}`}>
       <div className={styles.navResInner}>

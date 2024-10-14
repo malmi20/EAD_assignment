@@ -29,8 +29,8 @@ function OrderManagement() {
   const [inventoryData, setInventoryData] = useState([]);
 
   const { user } = useContext(AppContext);
-  const isCSR = user?.assignedRoles.includes("CSR");
-  const isAdmin = user?.assignedRoles.includes("ADMIN");
+  const isCSR = user?.assignedRoles?.includes("CSR");
+  const isAdmin = user?.assignedRoles?.includes("ADMIN");
 
   useEffect(() => {
     fetchProductData();

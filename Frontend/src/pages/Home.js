@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useContext(AppContext);
-  const isAdmin = user?.assignedRoles.includes("ADMIN");
-  const vendor =  user?.assignedRoles.includes("VENDOR");
+  const isAdmin = user?.assignedRoles?.includes("ADMIN");
+  const vendor =  user?.assignedRoles?.includes("VENDOR");
   useEffect(() => {
     navigate("/productManager")
   })

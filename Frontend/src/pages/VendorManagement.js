@@ -20,8 +20,10 @@ const vendorsData = [
 const mockVendorCredentials = {};
 
 // VendorManagement component
-const VendorManagement = ({ isAdmin }) => {
+const VendorManagement = () => {
   const { user } = useContext(AppContext);
+  const isAdmin = user?.assignedRoles.includes("ADMIN");
+  const vendor =  user?.assignedRoles.includes("VENDOR");
   const [vendors, setVendors] = useState(vendorsData);
   const [newVendorId, setNewVendorId] = useState('');
   const [newVendorName, setNewVendorName] = useState('');
@@ -52,7 +54,7 @@ const VendorManagement = ({ isAdmin }) => {
     <Container>
       <h1 className="my-4 text-center">Vendor Management</h1>
 
-        <Row className="mb-5">
+        <Row className="mb-5" hidden={!isAdmin}>
           <Col md={6}>
             <Form>
               <Form.Group className="mb-3">

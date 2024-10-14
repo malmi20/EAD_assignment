@@ -276,7 +276,7 @@ function ProductManager() {
                       required
                       value={initialValues.ratingValue}
                       onChange={(e) =>
-                        setValues({ ...initialValues, ratingValue: parseFloat(e.target.value) > 5 ? 5 : parseFloat(e.target.value) })
+                        setValues({ ...initialValues, ratingValue: e.target.value && parseFloat(e.target.value) > 5 ? 5 : parseFloat(e.target.value) || 0 })
                       }
                     />
                   </Form.Group>
@@ -294,7 +294,7 @@ function ProductManager() {
                         setValues({ ...initialValues, categoryID: e.target.value })
                       }
                     >
-                      <option value="">Select a categoryID</option>
+                      <option value="">Select a category</option>
                       {categories?.map((category) => (
                         <option key={category.categoryID} value={category.categoryID}>
                           {category.name}
@@ -321,7 +321,7 @@ function ProductManager() {
               <Row className='mt-3'>
                 <Form.Label>Upload The Product Image</Form.Label>
                 <br/><br/>
-                <div className="img-wrapper">
+                <div className="img-wrapper" style={{width: "20%"}}>
                     <label htmlFor="img-upload" className="img-upload-label">
                         <img 
                             src={expenseData.img != '' && file === null ? expenseData.img : file === null ? SampleImg : imagePreview} 

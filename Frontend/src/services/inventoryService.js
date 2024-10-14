@@ -1,7 +1,7 @@
 import apiClient from "../apiClient";
 
 // fetch all producst in inventory
-export const getProductsService = async () => {
+export const getInventoryService = async () => {
     try {
         const response = await apiClient.get("/inventory");        
         return response.data;

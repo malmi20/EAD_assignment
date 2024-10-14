@@ -1,6 +1,6 @@
 {
   "proxy": "http://localhost:7163",
-  "name": "bus-routing",
+  "name": "e-commerce",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

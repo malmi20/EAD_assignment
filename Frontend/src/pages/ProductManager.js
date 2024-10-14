@@ -6,7 +6,9 @@ import { BsSearch } from 'react-icons/bs';
 import Table from "../components/custom/CustomTable";
 import CustomModal from "../components/custom/CustomModal";
 import SampleImg from '../assets/upload-img.png';
+import { notify } from "../components/custom/ToastMessage";
 import { AppContext } from "../context/AuthContext";
+import { activeProductService, createProductService, deactiveProductService, deleteProduct, getCategoryService, getProductsService, updateProductService } from '../services/productService';
 
 
 function ProductManager() {
@@ -14,13 +16,15 @@ function ProductManager() {
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const expenseData={img:""}
+  const isAdmin = user?.assignedRoles.includes("ADMIN");
+  const vendor =  user?.assignedRoles.includes("VENDOR");
   const initialData = {
     id: "",
     name: "",
     description: "",
     price: "",
-    quantity: "",
-    category: "",
+    ratingValue: 0,
+    categoryID: "",
     isActive: true,
   };
   const defaultState = "Add";
@@ -42,9 +46,9 @@ function ProductManager() {
   const fetchProductData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetchProducts();
-      setProductData(response.data.details);
-      setTableData(response.data.details);
+      const response = await getProductsService();
+      setProductData(response);
+      setTableData(response);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -54,60 +58,43 @@ function ProductManager() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetchCategoriesData();
-      setCategories(response.data.categories);
+      const response = await getCategoryService();
+      setCategories(response);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
-
-  const fetchProducts = async () => {
-    // Mock data (replace this with actual API call)
-    return {
-      data: {
-        details: [
-          { id: "prod_001", name: 'Product 1', description: 'Product 1 description', price: 10.99, quantity: 10, category: 'Electronics', isActive: true },
-          { id: "prod_002", name: 'Product 2', description: 'Product 2 description', price: 9.99, quantity: 20, category: 'Clothing', isActive: false },
-          { id: "prod_003", name: 'Product 3', description: 'Product 3 description', price: 12.99, quantity: 30, category: 'Home', isActive: true },
-        ],
-      },
-    };
-  };
-
-  const fetchCategoriesData = async () => {
-    // Mock data (replace this with actual API call)
-    return {
-      data: {
-        categories: ['Electronics', 'Clothing', 'Home', 'Books', 'Toys'],
-      },
-    };
-  };
-
   const submitHandler = async (values) => {
     setSubmitting(true);
     try {
       const payload = {
         id: values.id || `prod_${Date.now()}`, // Generate a unique ID if it's a new product
         name: values.name,
+        title: values.name,
         description: values.description,
         price: values.price,
-        quantity: values.quantity,
-        category: values.category,
+        categoryID: values.categoryID,
+        category: categories.find((i) => i.categoryID === values.categoryID)?.name || "",
+        image: 'https://via.placeholder.com/150', // BACKEND API expects an image URL
+        RatingValue: values.ratingValue,
         isActive: values.isActive,
       };
 
       if (currentState === "Add") {
-        await saveProduct(payload);
+        delete payload.id;
+        await createProductService(payload);
       } else {
-        await updateProduct(payload);
+        await updateProductService(values.id, payload);
       }
 
       resetForm();
       setValues(initialData);
       setCurrentState(defaultState);
-      // fetchProductData();
+      notify("success", `Product ${currentState === "Add" ? "added" : "updated"} successfully`);
+      fetchProductData();
     } catch (error) {
       console.error("Error submitting form :", error);
+      notify("error", `Error ${currentState === "Add" ? "adding" : "updating"} product`);
     } finally {
       setSubmitting(false);
     }
@@ -116,24 +103,6 @@ function ProductManager() {
   const resetForm = () => {
     setValues(initialData);
     setCurrentState(defaultState);
-  };
-
-  const saveProduct = async (payload) => {
-    // Mock API call
-    console.log("Saving product:", payload);
-    setProductData(prev => ([...prev,{...payload}]));
-    setTableData(prev => ([...prev,{...payload}]));
-    return {
-      data: { message: 'Product saved successfully' },
-    };
-  };
-
-  const updateProduct = async (payload) => {
-    // Mock API call
-    console.log("Updating product:", payload);
-    return {
-      data: { message: 'Product updated successfully' },
-    };
   };
 
   const onSearchHandler = (e =null) => {
@@ -158,37 +127,25 @@ function ProductManager() {
   const onDeleteHandler = async () => {
     try {
       await deleteProduct(selectedItem.id);
-      // fetchProductData();
+      fetchProductData();
       setSelectedItem(null);
       setShow(false);
     } catch (error) {
+      notify("error", "Error deleting product");
       console.error("Error deleting product:", error);
     }
   };
 
-  const deleteProduct = async (id) => {
-    // Mock API call
-    console.log("Deleting product:", id);
-    return {
-      data: { message: 'Product deleted successfully' },
-    };
-  };
-
   const toggleProductStatus = async (id, currentStatus) => {
     try {
-      await updateProductStatus(id, !currentStatus);
+      if(currentStatus) await deactiveProductService(id);
+      else await activeProductService(id);
+      notify("success", "Product status updated successfully");
       fetchProductData();
     } catch (error) {
+      notify("error", "Error toggling product status");
       console.error("Error toggling product status:", error);
     }
-  };
-
-  const updateProductStatus = async (id, newStatus) => {
-    // Mock API call
-    console.log("Updating product status:", id, newStatus);
-    return {
-      data: { message: 'Product status updated successfully' },
-    };
   };
 
   const COLUMNS = [
@@ -196,8 +153,8 @@ function ProductManager() {
     { label: "Name", renderCell: (item) => item.name },
     { label: "Description", renderCell: (item) => item.description },
     { label: "Price", renderCell: (item) => item.price },
-    { label: "Quantity", renderCell: (item) => item.quantity },
-    { label: "Category", renderCell: (item) => item.category },
+    { label: "Rating", renderCell: (item) => item.ratingValue },
+    { label: "Category", renderCell: (item) => categories.find(i => item.categoryID === i.categoryID)?.name },
     { label: "Status", renderCell: (item) => (
       <Badge bg={item.isActive ? "success" : "danger"}>
         {item.isActive ? "Active" : "Inactive"}
@@ -211,6 +168,7 @@ function ProductManager() {
           <Button
             variant={item.isActive ? "warning" : "success"}
             className="me-2"
+            disabled={!isAdmin}
             size="sm"
             onClick={() => toggleProductStatus(item.id, item.isActive)}
           >
@@ -244,7 +202,7 @@ function ProductManager() {
   return (
     <Row className="px-5 pt-4">
       {
-        user?.assignedRoles?.includes("VENDOR") &&
+        (isAdmin || vendor) &&
         <Card body className="shadow p-3 mb-3 bg-white rounded">
           <Card.Title>
             <u>Product Management</u>
@@ -258,7 +216,6 @@ function ProductManager() {
               cancelAction={() => setSelectedItem(null)}
             />
             <Form
-              noValidate
               onSubmit={(e) => {
                 e.preventDefault();
                 submitHandler(initialValues);
@@ -270,6 +227,7 @@ function ProductManager() {
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                       name="name"
+                      required
                       value={initialValues.name}
                       onChange={(e) =>
                         setValues({ ...initialValues, name: e.target.value })
@@ -282,6 +240,7 @@ function ProductManager() {
                     <Form.Label>Description</Form.Label>
                     <Form.Control
                       name="description"
+                      required
                       value={initialValues.description}
                       onChange={(e) =>
                         setValues({
@@ -298,6 +257,7 @@ function ProductManager() {
                     <Form.Control
                       name="price"
                       type="number"
+                      required
                       value={initialValues.price}
                       onChange={(e) =>
                         setValues({ ...initialValues, price: e.target.value })
@@ -305,35 +265,39 @@ function ProductManager() {
                     />
                   </Form.Group>
                 </Col>
-              </Row>
-              <Row>
                 <Col md={4}>
-                  <Form.Group controlId="quantity">
-                    <Form.Label>Quantity</Form.Label>
+                  <Form.Group controlId="rating">
+                    <Form.Label>Rating</Form.Label>
                     <Form.Control
-                      name="quantity"
-                      type="number"
-                      value={initialValues.quantity}
+                      name="rating"
+                      type="double"
+                      min={0}
+                      max={5}
+                      required
+                      value={initialValues.ratingValue}
                       onChange={(e) =>
-                        setValues({ ...initialValues, quantity: e.target.value })
+                        setValues({ ...initialValues, ratingValue: parseFloat(e.target.value) > 5 ? 5 : parseFloat(e.target.value) })
                       }
                     />
                   </Form.Group>
                 </Col>
+              </Row>
+              <Row>
                 <Col md={4}>
-                  <Form.Group controlId="category">
+                  <Form.Group controlId="categoryID">
                     <Form.Label>Category</Form.Label>
                     <Form.Select
-                      name="category"
-                      value={initialValues.category}
+                      required
+                      name="categoryID"
+                      value={initialValues.categoryID}
                       onChange={(e) =>
-                        setValues({ ...initialValues, category: e.target.value })
+                        setValues({ ...initialValues, categoryID: e.target.value })
                       }
                     >
-                      <option value="">Select a category</option>
-                      {categories.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
+                      <option value="">Select a categoryID</option>
+                      {categories?.map((category) => (
+                        <option key={category.categoryID} value={category.categoryID}>
+                          {category.name}
                         </option>
                       ))}
                     </Form.Select>
@@ -380,14 +344,13 @@ function ProductManager() {
                                 }
                                 setFile(img);
                             }}
-                            required
                         />
                     </label>
                 </div>
               </Row>
               <Row className="mt-2">
                 <Col className="d-flex justify-content-start">
-                  {initialValues.name || initialValues.description || initialValues.price || initialValues.quantity ? (
+                  {initialValues.name || initialValues.description || initialValues.price ? (
                     <Button variant="secondary" type="reset" onClick={resetForm}>
                       Cancel
                     </Button>
@@ -424,16 +387,6 @@ function ProductManager() {
               <Table nodes={tableData} columns={COLUMNS} />
             )}
           </Col>
-        </Card>
-      }
-
-      {
-        user?.assignedRoles?.includes("ADMIN") &&
-        <Card body className="shadow p-3 mb-3 bg-white rounded">
-          <Card.Title>
-            <u>Categories Management</u>
-          </Card.Title>
-          <hr />
         </Card>
       }
     </Row>

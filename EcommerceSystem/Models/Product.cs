@@ -15,7 +15,7 @@ namespace EcommerceSystem.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } // MongoDB automatically generates this ID
+        public string? Id { get; set; } // MongoDB automatically generates this ID if not provided
 
         public string Name { get; set; }
 

@@ -23,8 +23,8 @@ function OrderManagement() {
   const [cancelNote, setCancelNote] = useState("");
 
   const { user } = useContext(AppContext);
-  const isCSR= user?.role === "CSR";
-  const isAdmin = user?.role === "Admin";
+  const isCSR= user?.assignedRoles.includes("CSR");
+  const isAdmin = user?.assignedRoles.includes("ADMIN");
 
   // Handle form submission for creating or updating an order
   const handleSubmit = (e) => {

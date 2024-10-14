@@ -39,6 +39,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 
 //services registration ----------------------------------------------------------------
 builder.Services.AddScoped<CategoryService>();
@@ -54,6 +65,9 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
+
+// Enable CORS middleware
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

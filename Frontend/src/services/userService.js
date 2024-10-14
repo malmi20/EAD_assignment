@@ -8,7 +8,7 @@ import { post } from "../utils/apiHelper";
 export const login = async (loginDetails) => {
   try {
     if (!loginDetails) throw new Error("Invalid login details");
-    const response = await post("/user/login", loginDetails, false);
+    const response = await post("/Auth/login", loginDetails, false);
     return response;
   } catch (error) {
     console.error(error);
@@ -23,7 +23,7 @@ export const login = async (loginDetails) => {
  */
 export const register = async (registerDetails) => {
   try {
-    const response = await post("/user/register", registerDetails, false);
+    const response = await post("/Auth/register", registerDetails, false);
     return response;
   } catch (error) {
     console.error(error);

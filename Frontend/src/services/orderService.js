@@ -45,13 +45,13 @@ export const updateOrderService = async (data, id) => {
 };
 
 //delete an order
-export const deleteOrderService = async (id) => {
-    try {
-        const response = await apiClient.delete(`/data/${id}`, data);
-        return response.data;
-    } catch (error) {
-        console.error("Error posting data:", error);
-        throw error;
-    }
-};
+// export const deleteOrderService = async (id,) => {
+//     try {
+//         const response = await apiClient.delete(`/data/${id}`, data);
+//         return response.data;
+//     } catch (error) {
+//         console.error("Error posting data:", error);
+//         throw error;
+//     }
+// };
 

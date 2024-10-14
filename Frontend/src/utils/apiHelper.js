@@ -119,18 +119,18 @@ axios.interceptors.response.use(
     return interceptedResponse;
   },
   (interceptedResponseError) => {
-    if (
-      interceptedResponseError.response &&
-      interceptedResponseError.response.status === 401
-    ) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userData");
-      window.location.href = "/";
-    } else {
-      throw interceptedResponseError.response
-        ? interceptedResponseError.response.data
-        : interceptedResponseError;
-    }
+    // if (
+    //   interceptedResponseError.response &&
+    //   interceptedResponseError.response.status === 401
+    // ) {
+    //   localStorage.removeItem("token");
+    //   localStorage.removeItem("userData");
+    //   window.location.href = "/";
+    // } else {
+    //   throw interceptedResponseError.response
+    //     ? interceptedResponseError.response.data
+    //     : interceptedResponseError;
+    // }
     return Promise.reject(interceptedResponseError);
   }
 );

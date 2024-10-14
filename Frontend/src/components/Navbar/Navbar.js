@@ -7,8 +7,9 @@ import logo from "../../assets/logo.png"
 
 const Navbar = ({ hamActive, setHamActive }) => {
   const { handleSignOut, isAuthenticated,user } = useContext(AppContext);
-  const isAdmin = user?.role === "Admin";
-  const vendor =  user?.role === "Vendor";
+  const isAdmin = user?.assignedRoles.includes("ADMIN");
+  const vendor =  user?.assignedRoles.includes("VENDOR");
+  const csr =  user?.assignedRoles.includes("CSR");
 
   const location = useLocation();
   const { pathname } = location;
@@ -35,22 +36,22 @@ const Navbar = ({ hamActive, setHamActive }) => {
         <div className="d-flex align-items-center">
           {isAuthenticated && (
           <div className={styles.navLinksWrapper}>
-            {(user.assignedRoles.includes("VENDOR") || user.assignedRoles.includes("ADMIN") || user.assignedRoles.includes("CSR")) && <div className={styles.navLinksWrapper}>
+            {(isAdmin || vendor || csr) && <div className={styles.navLinksWrapper}>
               <Link to={"/OrderManagement"} className={`${styles.nav} center ${pathname === '/OrderManagement' && 'active'}`}>
                 Order Management
               </Link>
             </div>}
-            {(user.assignedRoles.includes("VENDOR") || user.assignedRoles.includes("ADMIN")) && <div className={styles.navLinksWrapper}>
+            {((isAdmin || vendor)) && <div className={styles.navLinksWrapper}>
               <Link to={"/productManager"} className={`${styles.nav} center ${pathname === '/productManager' && 'active'}`}>
                 Product Management
               </Link>
             </div>}
-            {(user.assignedRoles.includes("ADMIN")) && <div className={styles.navLinksWrapper}>
+            {(isAdmin) && <div className={styles.navLinksWrapper}>
               <Link to={"/VendorManagement"} className={`${styles.nav} center ${pathname === '/VendorManagement' && 'active'}`}>
                 Vendor Management
               </Link>
             </div>}
-            {(user.assignedRoles.includes("ADMIN")) && <div className={styles.navLinksWrapper}>
+            {(isAdmin) && <div className={styles.navLinksWrapper}>
               <Link to={"/InventoryManagement"} className={`${styles.nav} center ${pathname === '/InventoryManagement' && 'active'}`}>
                 Inventory Management
               </Link>

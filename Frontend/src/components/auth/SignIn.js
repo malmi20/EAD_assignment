@@ -28,8 +28,9 @@ const SignInForm = forwardRef((_props, ref) => {
       setSubmitting(true);
       setIsLoading(true);
       const authData = await login(values);
+      console.log("authData", authData);
       if (authData.status === 200) {
-        const authDataDetails = {...authData.data.details, assignedRoles: ["ADMIN", "VENDOR", "CSR"]};       
+        const authDataDetails = {...authData.data, assignedRoles: authData.data.role};       
         // const authDataDetails = {...authData.data.details, assignedRoles: ["CSR"]};  
         // const authDataDetails = {...authData.data.details, assignedRoles: ["VENDOR"]};  
         // const authDataDetails = {...authData.data.details, assignedRoles: ["ADMIN"]};       
@@ -44,7 +45,10 @@ const SignInForm = forwardRef((_props, ref) => {
     } catch (error) {
       console.error(`error`, error);
       let errorMessage = "";
-      if (error.message) {
+      if(error.response && error.response.data){
+        errorMessage = error.response.data.title;
+      }
+      else if (error.message) {
         errorMessage = error.message;
       } else {
         errorMessage = "Something went wrong";

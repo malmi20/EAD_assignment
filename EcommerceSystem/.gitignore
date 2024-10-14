@@ -1,0 +1,109 @@
+# Build Folders
+bin/
+obj/
+
+# User-Specific Files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Temporary Files
+**/App_Data/ASP.NET Temporary Files/
+**/App_Data/Logs/
+**/App_Data/Packages/
+
+# Rider project files
+.idea/
+
+# Visual Studio Code files
+.vscode/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+.nuget/
+
+# Generated Assembly Info
+Generated_Code/
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# MacOS system files
+.DS_Store
+
+# Log files
+*.log
+
+# Compiled DLLs
+*.dll
+*.exe
+*.so
+*.dylib
+*.class
+
+# Debug / Release Folders
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Publish Folders
+publish/
+*.pubxml
+*.publishproj
+
+# JetBrains Rider directories
+.idea/
+
+# Local History
+.idea/.idea.LocalHistory
+
+# Coverage Reports
+coverage/
+*.coverage
+*.coveragexml
+*.testresult.xml
+
+# VSCode workspace settings
+.vscode/
+.vs/
+
+# IIS Logs
+IISExpress/
+
+# Configuration Cache
+config/cache/
+
+# SQLite database files
+*.db
+*.sqlite
+
+# JSON configuration files for app secrets
+appsettings.Development.json
+appsettings.Staging.json
+appsettings.Production.json
+
+# User secrets (for local development)
+secrets.json
+
+# node_modules
+node_modules/
+
+# Yarn lockfile
+yarn.lock
+
+# NPM package-lock.json
+package-lock.json
+
+# Backup & temporary files
+*.bak
+*.swp

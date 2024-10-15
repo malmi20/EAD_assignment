@@ -5,7 +5,6 @@
  * Created: 08/10/2024
  */
 
-
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ namespace EcommerceSystem.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString(); // Automatically generate an ID
 
         public string FirstName { get; set; }
         public string LastName { get; set; }

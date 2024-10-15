@@ -20,6 +20,9 @@ builder.Services.AddSingleton<MongoDbContext>();
 var jwtKey = builder.Configuration["Jwt:Key"];
 builder.Services.AddSingleton(new TokenService(jwtKey));
 
+// Vendor Service
+builder.Services.AddScoped<VendorService>();  // Register the VendorService for dependency injection
+
 // JWT Bearer Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -50,14 +53,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-//services registration ----------------------------------------------------------------
+// Register other services
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddSingleton<InventoryService>();
 builder.Services.AddSingleton<EcommerceSystem.Notifications.VendorNotificationService>();
-
 
 builder.Services.AddControllers();
 

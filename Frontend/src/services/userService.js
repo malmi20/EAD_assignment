@@ -1,4 +1,5 @@
 import { post } from "../utils/apiHelper";
+import apiClient from "../apiClient";
 
 /**
  * login
@@ -8,7 +9,7 @@ import { post } from "../utils/apiHelper";
 export const login = async (loginDetails) => {
   try {
     if (!loginDetails) throw new Error("Invalid login details");
-    const response = await post("/Auth/login", loginDetails, false);
+    const response = apiClient.post("/Auth/login", loginDetails, false);
     return response;
   } catch (error) {
     console.error(error);

@@ -5,23 +5,44 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.e_comandroidapp.adapters.CategoriesAdapter;
 import com.example.e_comandroidapp.adapters.OrderHistoryAdapter;
 import com.example.e_comandroidapp.adapters.ProductsAdapter;
+import com.example.e_comandroidapp.dto.UserInfoResponse;
+import com.example.e_comandroidapp.models.Category;
 import com.example.e_comandroidapp.models.OrderHistory;
+import com.example.e_comandroidapp.services.ApiClient;
+import com.example.e_comandroidapp.services.ApiService;
+import com.example.e_comandroidapp.sqlLite.DatabaseHelper;
+import com.example.e_comandroidapp.sqlLite.UserDatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserProfileActivity extends AppCompatActivity {
+
+    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+    UserDatabaseManager userManager;
 
     private List<OrderHistory> orderHistoryList = new ArrayList<>();
     private RecyclerView orderHistoryRecyclerView;
     private OrderHistoryAdapter orderHistoryAdapter;
+
+    UserInfoResponse loggedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +67,76 @@ public class UserProfileActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        userManager = new UserDatabaseManager(this);
+        userManager.open();
+        String userId = "";
+
+        // navigate to sign in activity if there is no valid user session
+        Cursor cursor = userManager.getAllUsers();
+        if (cursor.moveToFirst()) {
+            do {
+                userId = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_ACCESS_TOKEN));
+            } while (cursor.moveToNext());
+        }
+
+        // Call the API to user info
+        Call<UserInfoResponse> call = apiService.fetchUserinfoById(userId);
+        call.enqueue(new Callback<UserInfoResponse>() {
+            @Override
+            public void onResponse(Call<UserInfoResponse> call, Response<UserInfoResponse> response) {
+                System.out.println("response userinfo get ++++++++++");
+                System.out.println(response.body().toString());
+                if (response.isSuccessful()) {
+                    loggedUser = response.body();
+                    Log.d("RAW_RESPONSE", response.body().toString());
+                    TextView userInfoFnBanner = findViewById(R.id.user_profile_fn);
+                    TextView userInfoLnBanner = findViewById(R.id.user_profile_ln);
+                    TextView userInfoFn = findViewById(R.id.user_profile_fn_val);
+                    TextView userInfoLn = findViewById(R.id.user_profile_ln_val);
+                    TextView userInfoEmail = findViewById(R.id.user_profile_email_val);
+                    TextView userInfoContact = findViewById(R.id.user_profile_contact_val);
+                    TextView userInfoAddress = findViewById(R.id.user_profile_address_val);
+
+                    // populate the data of the selected product
+                    userInfoFn.setText(loggedUser.getFirstName());
+                    userInfoLn.setText(loggedUser.getLastName());
+                    userInfoFnBanner.setText(loggedUser.getFirstName());
+                    userInfoLnBanner.setText(loggedUser.getLastName());
+                    userInfoEmail.setText(loggedUser.getEmail());
+                    userInfoContact.setText(loggedUser.getContact());
+                    userInfoAddress.setText(loggedUser.getAddress());
+
+//                    categoryList = response.body();
+
+                    // Set adapter with the fetched data
+//                    adapter = new CategoriesAdapter(categoryList, onTextViewClickListener);
+//                    categoriesHorizontalview.setAdapter(adapter);
+                } else {
+                    System.out.println("API_ERROR - " + "Response error: ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserInfoResponse> call, Throwable t) {
+                System.out.println("API_ERROR - " + "Failure: " + t.getMessage());
+            }
+        });
+
+        // Retrieve the data from the Intent
+//        TextView userInfoFn = findViewById(R.id.user_profile_fn_val);
+//        TextView userInfoLn = findViewById(R.id.user_profile_ln_val);
+//        TextView userInfoEmail = findViewById(R.id.user_profile_email_val);
+//        TextView userInfoContact = findViewById(R.id.user_profile_contact_val);
+//        TextView userInfoAddress = findViewById(R.id.user_profile_address_val);
+//
+//        // populate the data of the selected product
+//        userInfoFn.setText(loggedUser.getFirstName());
+//        userInfoLn.setText(loggedUser.getLastName());
+//        userInfoEmail.setText(loggedUser.getEmail());
+//        userInfoContact.setText(loggedUser.getContact());
+//        userInfoAddress.setText(loggedUser.getAddress());
+
 
         //logout button binding
         Button logoutButton = findViewById(R.id.log_out_button);

@@ -15,7 +15,8 @@ namespace EcommerceSystem.Models
     public class Order
     {
         [BsonId]
-        public ObjectId _id { get; set; } // MongoDB will auto-generate this ID
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } // MongoDB will auto-generate this ID
 
         public string CustomerId { get; set; } // Reference to the customer
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;

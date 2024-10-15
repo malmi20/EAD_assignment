@@ -2,11 +2,11 @@ import axios from "axios";
 
 // Create an Axios instance with default settings
 const apiClient = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: "http://localhost:7163/api",
     headers: {
         "Content-Type": "application/json",
     },
-});
+});//,
 
 apiClient.interceptors.request.use(
     (config) => {

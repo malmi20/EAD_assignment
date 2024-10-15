@@ -3,6 +3,8 @@ package com.example.e_comandroidapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,14 +13,31 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.e_comandroidapp.dto.CartItem;
+import com.example.e_comandroidapp.models.Product;
+import com.example.e_comandroidapp.sqlLite.DatabaseHelper;
+import com.example.e_comandroidapp.sqlLite.UserDatabaseManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
+import java.util.Objects;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 
 public class ProductInfoActivity extends AppCompatActivity {
 
+    UserDatabaseManager userManager;
+
     BottomSheetDialog dialog;
     Button show;
+
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +45,21 @@ public class ProductInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_info);
 
         Intent intent = getIntent();
+
+        userManager = new UserDatabaseManager(this);
+        userManager.open();
+        // navigate to sign in activity if there is no valid user session
+        Cursor cursor = userManager.getAllUsers();
+        if (cursor.moveToFirst()) {
+            do {
+                String username = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_USERNAME));
+                userId = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_ACCESS_TOKEN));
+            } while (cursor.moveToNext());
+        }else{
+            Intent intents = new Intent(ProductInfoActivity.this, SignInActivity.class);
+            startActivity(intents);
+            finish();
+        }
 
         // Retrieve the data from the Intent
         TextView productInfoTitle = findViewById(R.id.product_info_tittle);
@@ -82,6 +116,37 @@ public class ProductInfoActivity extends AppCompatActivity {
         Button addToCartButton = findViewById(R.id.product_info_button_addToCart);
         addToCartButton.setOnClickListener(item -> {
             addToCart("userid001", productId);
+        });
+
+        Button addCart = findViewById(R.id.product_info_button_addToCart);
+        addCart.setOnClickListener(item -> {
+            // Get SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("userCartList1", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String stringOfCart = sharedPreferences.getString("userCartItems", "[]");
+
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<CartItem>>() {}.getType();
+            ArrayList<CartItem> userList = gson.fromJson(stringOfCart, type);
+
+            userList.add(new CartItem(userId, new Product(
+                productId,
+                null,
+                intent.getStringExtra("pname"),
+                intent.getStringExtra("ptitle"),
+                    Double.parseDouble(intent.getStringExtra("pprice")),
+                intent.getStringExtra("pdescription"),
+                intent.getStringExtra("pcategory"),
+                intent.getStringExtra("pimage"),
+                null,
+                Double.parseDouble(intent.getStringExtra("prating"))
+            )));
+
+            stringOfCart = gson.toJson(userList);
+
+            // Store the JSON string in SharedPreferences
+            editor.putString("userCartItems", stringOfCart);
+            editor.apply();
         });
     }
 

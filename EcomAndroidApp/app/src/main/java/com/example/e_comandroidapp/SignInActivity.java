@@ -99,7 +99,7 @@ public class SignInActivity extends AppCompatActivity {
                     Toast.makeText(SignInActivity.this, "Sign-in successful", Toast.LENGTH_SHORT).show();
                     System.out.println("gbbbbbbbbbbb\t"+response.body().getFullName());
 //                    userManager.addUserSession(response.body().getUsername(), response.body().getAccessToken());
-                    userManager.updateFirstRecord(response.body().getFullName(), response.body().getToken());
+                    userManager.updateFirstRecord(response.body().getFullName(), response.body().getId());
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

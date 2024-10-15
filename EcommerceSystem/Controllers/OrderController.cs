@@ -28,7 +28,7 @@ namespace EcommerceSystem.Controllers
         public async Task<IActionResult> CreateOrder([FromBody] Order order)
         {
             await _orderService.CreateOrderAsync(order);
-            return CreatedAtAction(nameof(GetOrderById), new { id = order._id.ToString() }, order);
+            return Ok("successfully created");
         }
 
 

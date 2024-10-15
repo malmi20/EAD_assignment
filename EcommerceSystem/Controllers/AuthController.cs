@@ -22,12 +22,15 @@ namespace EcommerceSystem.Controllers
         private readonly MongoDbContext _dbContext;
         private readonly PasswordHasher<ApplicationUser> _passwordHasher;
         private readonly TokenService _tokenService;
+        private readonly IMongoCollection<ApplicationUser> _user;
+
 
         public AuthController(MongoDbContext dbContext, TokenService tokenService)
         {
             _dbContext = dbContext;
             _passwordHasher = new PasswordHasher<ApplicationUser>();
             _tokenService = tokenService;
+            _user = dbContext.Users;
         }
 
 
@@ -85,5 +88,23 @@ namespace EcommerceSystem.Controllers
                 Role = user.Roles
             });
         }
+
+        // Get all products by category
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetUserInfo(string id)
+        {
+            //var products = await _.GetProductsByCategoryAsync(category);
+            var user = await _user.Find(user => user.Id == id).FirstOrDefaultAsync();
+            return Ok(new
+            { 
+                id = user.Id,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                email = user.Email,
+                contact = user.ContactNo,
+                address = user.Address,
+            });
+        }
+
     }
 }

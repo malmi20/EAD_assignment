@@ -35,7 +35,7 @@ namespace EcommerceSystem.Services
 
         // Get order by ID
         public async Task<Order> GetOrderByIdAsync(string id) =>
-            await _orders.Find(order => order._id == new ObjectId(id)).FirstOrDefaultAsync();
+            await _orders.Find(order => order.Id == id).FirstOrDefaultAsync();
 
         // Update order (only if not dispatched)
         public async Task UpdateOrderAsync(string id, Order updatedOrder)
@@ -43,7 +43,7 @@ namespace EcommerceSystem.Services
             var order = await GetOrderByIdAsync(id);
             if (order != null && order.Status == "Processing")
             {
-                await _orders.ReplaceOneAsync(o => o._id == new ObjectId(id), updatedOrder);
+                await _orders.ReplaceOneAsync(o => o.Id == id, updatedOrder);
             }
         }
 
@@ -53,7 +53,7 @@ namespace EcommerceSystem.Services
             var order = await GetOrderByIdAsync(id);
             if (order != null && order.Status == "Processing")
             {
-                await _orders.DeleteOneAsync(o => o._id == new ObjectId(id));
+                await _orders.DeleteOneAsync(o => o.Id == id);
             }
         }
 
@@ -64,7 +64,7 @@ namespace EcommerceSystem.Services
             if (order != null && order.Status == "Processing")
             {
                 await _orders.UpdateOneAsync(
-                    o => o._id == new ObjectId(id),
+                    o => o.Id == id,
                     Builders<Order>.Update
                         .Set(o => o.Status, "Dispatched")
                         .Set(o => o.DispatchedAt, DateTime.UtcNow)

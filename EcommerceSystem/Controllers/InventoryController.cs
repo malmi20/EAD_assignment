@@ -43,11 +43,17 @@ namespace EcommerceSystem.Controllers
         //update the inventory
 
         [HttpPut("{productId}")]
-        public async Task<IActionResult> UpdateStock(string productId, [FromBody] int newQuantity)
+        public async Task<IActionResult> UpdateStock(string productId, [FromBody] UpdateStockRequest request)
         {
-            await _inventoryService.UpdateStockAsync(productId, newQuantity);
+            await _inventoryService.UpdateStockAsync(productId, request.NewQuantity);
             await _inventoryService.NotifyLowStockAsync(productId); // Check for low stock
             return Ok("Stock updated successfully");
+        }
+
+        // Define a DTO for the update stock request
+        public class UpdateStockRequest
+        {
+            public int NewQuantity { get; set; }
         }
 
 

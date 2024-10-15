@@ -7,7 +7,10 @@ import Table from "../components/custom/CustomTable";
 import { getInventoryService } from '../services/inventoryService';
 import { getProductsService } from '../services/productService';
 import { notify } from '../components/custom/ToastMessage';
-
+import { updateInventoryService } from '../services/inventoryService'; // Import the update service
+import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable'; // Import the autoTable plugin for jsPDF
 
 function InventoryManager() {
   const [inventoryData, setInventoryData] = useState([]);
@@ -38,7 +41,7 @@ function InventoryManager() {
   const fetchInventoryData = async () => {
     setIsLoading(true);
     try {
-      const response = await getInventoryService(); // Fetch inventory (same as product data, but focus on stock)
+      const response = await getInventoryService();
       setInventoryData(response);
       setTableData(response);
     } catch (error) {
@@ -47,7 +50,6 @@ function InventoryManager() {
       setIsLoading(false);
     }
   };
-
 
   const onSearchHandler = (e) => {
     const query = e.target.value.toLowerCase();
@@ -65,26 +67,68 @@ function InventoryManager() {
   const handleStockUpdate = async () => {
     setIsSubmitting(true);
     try {
-      // const updatedProduct = { ...selectedProduct, quantity: selectedProduct.quantity + stockUpdate };
-      // // Update stock in database or API
-      // console.log('Updated product stock:', updatedProduct);
-      // await updateInventoryService(selectedProduct.id, stockUpdate);
-      // Simulate API response and refresh inventory data
-      fetchInventoryData();
-      setSelectedProduct(null);
-      setStockUpdate(0);
-      notify('success' ,'Stock updated successfully!');
+        const updatedProduct = {
+            newQuantity: selectedProduct.quantity + stockUpdate
+        };
+
+        const response = await axios.put(`http://localhost:7163/api/inventory/${selectedProduct.productId}`, updatedProduct);
+        
+        if (response.status === 200) {
+            notify('success', 'Stock updated successfully!');
+            fetchInventoryData();
+            setSelectedProduct(null);
+            setStockUpdate(0);
+        } else {
+            notify('error', 'Failed to update stock!');
+        }
     } catch (error) {
-      notify('error' ,'Error updating stock!');
-      console.error('Error updating stock:', error);
+        notify('error', 'Error updating stock!');
+        console.error('Error updating stock:', error);
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
   };
+
+  // Function to generate and download the PDF report
+  const generatePDF = () => {
+    const doc = new jsPDF();
+
+    // Add a title to the PDF
+    doc.setFontSize(18);
+    doc.text('Inventory Report', 14, 22);
+
+    // Define the columns and rows for the table
+    const columns = ["Product Name", "Price", "Quantity", "Category", "Stock Status"];
+    const rows = inventoryData.map(item => {
+      const product = productData.find(p => p.id === item.productId);
+      const stockStatus = item.quantity > 5
+        ? "In Stock"
+        : item.quantity > 0
+        ? "Low Stock"
+        : "Out of Stock";
+      return [
+        product?.name || "Unknown",
+        `$${product?.price?.toFixed(2) || 0.00}`,
+        item.quantity,
+        product?.category || "N/A",
+        stockStatus
+      ];
+    });
+
+    // Add the table to the PDF
+    doc.autoTable({
+      startY: 30,
+      head: [columns],
+      body: rows
+    });
+
+    // Save the PDF with a dynamic name
+    doc.save(`Inventory_Report_${new Date().toLocaleDateString()}.pdf`);
+  };
+
   const COLUMNS = [
-    // { label: "ID", renderCell: (item) => item._id },
     { label: "Name", renderCell: (item) => productData?.find((p) => p.id === item.productId)?.name },
-    { label: "Price", renderCell: (item) => `$${productData?.find(p => p.id === item.productId)?.price?.toFixed(2) || 0.00}`},
+    { label: "Price", renderCell: (item) => `$${productData?.find(p => p.id === item.productId)?.price?.toFixed(2) || 0.00}` },
     { label: "Quantity", renderCell: (item) => item.quantity },
     { label: "Category", renderCell: (item) => productData?.find((p) => p.id === item.productId)?.category },
     { label: "Stock Status", renderCell: (item) => (
@@ -113,6 +157,8 @@ function InventoryManager() {
           <u>Inventory Management</u>
         </Card.Title>
         <Col md={12}>
+          {/* Button to download the PDF */}
+         
           {selectedProduct && (
             <Form
               onSubmit={(e) => {
@@ -123,7 +169,7 @@ function InventoryManager() {
               <Form.Group as={Row} className="mb-3">
                 <Form.Label column sm="2">Product</Form.Label>
                 <Col sm="4">
-                  <Form.Control plaintext readOnly value={selectedProduct.name} />
+                  <Form.Control plaintext readOnly value={productData?.find(p => p.id === selectedProduct.productId)?.name} />
                 </Col>
               </Form.Group>
               <Form.Group as={Row} className="mb-3">
@@ -170,8 +216,12 @@ function InventoryManager() {
             <Table nodes={tableData} columns={COLUMNS} />
           )}
         </Col>
+        <Button variant="success" onClick={generatePDF}>
+            Download Inventory Report
+          </Button>
       </Card>
     </Row>
+    
   );
 }
 
